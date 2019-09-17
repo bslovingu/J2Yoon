@@ -1,0 +1,73 @@
+@charset "UTF-8";
+.mail_form {
+	
+}
+
+.mail_table {
+	display: table;
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.mail_table_tr {
+	display: table-row;
+}
+
+.mail_table_td {
+	display: table-cell;
+	border: 1px solid #000;
+}
+
+.mail_table_td:first-child {
+	width: 30%;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 20px;
+}
+
+.mail_colspan {
+	width: calc(100% - 1px);
+	height: 80px;
+	border: 1px solid #000;
+	border-top: none;
+	text-align: center;
+}
+
+.mail_button {
+	margin-top: 25px;
+	width: 100px;
+	height: 30px;
+}
+
+.mail_input {
+	width: 400px;
+	height: 25px;
+	margin: 5px;
+	border-radius: 5px;
+	padding-left: 5px;
+}
+
+.mail_textarea {
+	width: 400px;
+	height: 270px;
+	margin: 5px;
+	border: 2px inset;
+	border-radius: 5px;
+	resize: none;
+}
+
+.mail_send_button {
+	border: 1px solid #47A665;
+	border-radius: 5px;
+	background-color: #56BD78;
+	color: #fff;
+	font-size: 18px;
+}
+
+.mail_reset_button {
+	border: 1px solid #47A665;
+	border-radius: 5px;
+	background-color: #56BD78;
+	color: #fff;
+	font-size: 18px;
+}
