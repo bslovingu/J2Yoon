@@ -14,7 +14,7 @@
     </form>
     <ul class="navbar-nav ml-lg-auto d-flex align-items-center flex-row">
       <li class="nav-item">
-        <a class="nav-link profile-pic" href="#"><img class="rounded-circle" src="/bootstrap2/images/face.jpg" alt=""></a>
+        <!-- <a class="nav-link profile-pic" href="#"><img class="rounded-circle" src="/bootstrap2/images/face.jpg" alt=""></a>  -->
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#"><i class="fa fa-th"></i></a>

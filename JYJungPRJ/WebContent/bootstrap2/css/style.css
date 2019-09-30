@@ -13933,12 +13933,12 @@ input {
   background-color: #f2f7fa;
   border: none; }
 
-.auth-pages .forgot-pass {
+.auth-pages .forgot-pass, .auth-pages .forgot-id {
   font-family: "Gudea", sans-serif;
   font-size: 13px;
   line-height: 2.31;
   text-align: right;
-  color: #1c2c3f; }
+  color: #007bff; }
 
 .auth-pages button {
   font-family: "Gudea", sans-serif;
