@@ -2,55 +2,43 @@
     pageEncoding="UTF-8"%>
 <nav class="bg-white sidebar sidebar-offcanvas" id="sidebar">
   <div class="user-info">
-    <!--  <img src="/bootstrap2/images/face.jpg" alt="">   -->
-    <p class="name">Richard V.Welsh</p>
-    <p class="designation">Manager</p>
-    <span class="online"></span>
+    <img src="/bootstrap2/images/soccerball.jpg" alt="">
+    <p></p>
+    <p class="name">ADMIN_001</p>
+    <p class="designation">관리자</p>
   </div>
   <ul class="nav">
     <li class="nav-item active">
       <a class="nav-link" href="/bootstrap2/index.html">
         <img src="/bootstrap2/images/icons/1.png" alt="">
-        <span class="menu-title">Dashboard</span>
+        <span class="menu-title">게시판</span>
       </a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="/bootstrap2/pages/widgets.html">
         <img src="/bootstrap2/images/icons/2.png" alt="">
-        <span class="menu-title">Widgets</span>
+        <span class="menu-title">체육시설 추천</span>
       </a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="/bootstrap2/pages/forms/index.html">
         <img src="/bootstrap2/images/icons/005-forms.png" alt="">
-        <span class="menu-title">Forms</span>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/bootstrap2/pages/ui-elements/buttons.html">
-        <img src="/bootstrap2/images/icons/4.png" alt="">
-        <span class="menu-title">Buttons</span>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/bootstrap2/pages/tables/index.html">
-        <img src="/bootstrap2/images/icons/5.png" alt="">
-        <span class="menu-title">Tables</span>
+        <span class="menu-title">체육시설 조회</span>
       </a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="/bootstrap2/pages/charts/index.html">
         <img src="/bootstrap2/images/icons/6.png" alt="">
-        <span class="menu-title">Charts</span>
+        <span class="menu-title">체육시설 예약정보</span>
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/bootstrap2/pages/icons/index.html">
-        <img src="/bootstrap2/images/icons/7.png" alt="">
-        <span class="menu-title">Icons</span>
+      <a class="nav-link" href="/bootstrap2/pages/tables/index.html">
+        <img src="/bootstrap2/images/icons/5.png" alt="">
+        <span class="menu-title">사용제한 인원목록</span>
       </a>
     </li>
-    <li class="nav-item">
+    <!--  <li class="nav-item">
       <a class="nav-link" href="/bootstrap2/pages/ui-elements/typography.html">
         <img src="/bootstrap2/images/icons/8.png" alt="">
         <span class="menu-title">Typography</span>
@@ -96,6 +84,6 @@
         <img src="/bootstrap2/images/icons/10.png" alt="">
         <span class="menu-title">Settings</span>
       </a>
-    </li>
+    </li> -->
   </ul>
 </nav>

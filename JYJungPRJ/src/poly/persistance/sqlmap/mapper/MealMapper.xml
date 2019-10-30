@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="poly.persistance.mapper.IMealMapper">
+
+	<insert id="InsertMealInfo" parameterType="MealDTO">
+		INSERT INTO MEAL_INFO(
+		MEAL_DT,
+		MEAL_CNT)
+
+		VALUES(
+		#{meal_date},
+		#{meal_cnt})
+	</insert>
+
+</mapper>
