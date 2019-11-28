@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="poly.persistance.mapper.NoticeMapper">
+
+	<!-- 공지사항 리스트 쿼리 -->
+	<select id="getAllNotice" resultType="NoticeDTO">
+		SELECT NOTICE_SEQ, NOTICE_TITLE, NOTICE_CONTENT, NOTICE_UPLOADNAME, NOTICE_CNT, NOTICE_UPDAY FROM FAC_NOTICE ORDER BY NOTICE_SEQ DESC
+	</select>
+	
+	<!--  공지사항 작성 쿼리 -->
+	<insert parameterType="NoticeDTO" id="insertNotice"> 
+		INSERT INTO FAC_NOTICE
+		 ( 
+		 	NOTICE_SEQ, NOTICE_TITLE, NOTICE_CONTENT, NOTICE_UPLOADNAME, NOTICE_UPDAY, NOTICE_CNT 
+		 ) 
+		 VALUES 
+		 ( 
+		 	NOTICE_SEQ.NEXTVAL, #{notice_title}, #{notice_content}, #{notice_uploadname}, SYSDATE, 0
+		 ) 
+	</insert>
+	<!--  공지사항 상세 쿼리 -->
+	<select id="getNoticeDetail" resultType="NoticeDTO">
+		SELECT NOTICE_SEQ, NOTICE_TITLE, NOTICE_CONTENT, NOTICE_UPLOADNAME, NOTICE_CNT, NOTICE_UPDAY FROM FAC_NOTICE WHERE NOTICE_SEQ = #{notice_seq}
+	</select>
+	
+	<!--  공지사항 수정 쿼리 -->
+	<update id="updateNoticeDetail" parameterType="NoticeDTO">
+		UPDATE FAC_NOTICE SET NOTICE_TITLE=#{notice_title}, NOTICE_CONTENT=#{notice_content}, NOTICE_UPDAY=SYSDATE WHERE NOTICE_SEQ=#{notice_seq}
+	</update>
+	
+	
+	
+	<!--  공지사항 수정 쿼리 -->
+	<update id="updateNoticeCnt" parameterType="NoticeDTO">
+		UPDATE FAC_NOTICE SET NOTICE_CNT=NOTICE_CNT + 1 WHERE NOTICE_SEQ=#{notice_seq}
+	</update>
+	
+	
+	<!-- 공지사항 삭제 쿼리 -->
+	<delete id="deleteNotice" parameterType="NoticeDTO">
+		DELETE FROM FAC_NOTICE WHERE NOTICE_SEQ=#{notice_seq}
+	</delete>
+	
+	<!-- 공지사항 갯수 조회 쿼리 -->
+	<select id="getNoticeTotal" resultType="int">
+		SELECT COUNT(*)
+		FROM FAC_NOTICE
+	</select>
+	
+	<!-- qna 리스트 쿼리 -->
+	<select id="getNoticeList" parameterType="NoticeDTO"
+		resultType="NoticeDTO">
+		<![CDATA[
+		SELECT 
+		NOTICE_SEQ, 
+		NOTICE_TITLE, 
+		NOTICE_CONTENT, 
+		NOTICE_UPLOADNAME, 
+		NOTICE_CNT, 
+		NOTICE_UPDAY
+		FROM (
+			SELECT A.* , ROWNUM as RNUM
+			FROM
+      		(
+        SELECT *
+        FROM FAC_NOTICE
+			ORDER BY NOTICE_SEQ DESC
+      )A
+			WHERE ROWNUM <= #{NendNum}
+		)
+		WHERE RNUM>=#{NstartNum}
+		]]>
+	</select>
+	
+</mapper>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="poly.persistance.mapper.ExerciseMapper">
+
+	<!-- 운동법 리스트 쿼리 -->
+	<select id="getAllExercise" resultType="ExerciseDTO">
+		SELECT EXER_SEQ, EXER_UPLOADNAME, EXER_TITLE, EXER_PATH, EXER_URL, EXER_CONTENT, EXER_CNT, EXER_UPDAY FROM EXERCISE
+	</select>
+	
+	<!--  운동법 작성 쿼리 -->
+	<insert parameterType="ExerciseDTO" id="insertExer"> 
+		INSERT INTO EXERCISE
+		 ( 
+		 	EXER_SEQ, EXER_UPLOADNAME, EXER_TITLE, EXER_PATH, EXER_URL, EXER_CONTENT, EXER_CNT, EXER_UPDAY 
+		 ) 
+		 VALUES 
+		 ( 
+		 	EXER_SEQ.NEXTVAL, #{exer_uploadname}, #{exer_title}, #{exer_path}, #{exer_url}, #{exer_content}, 0, SYSDATE
+		 ) 
+	</insert>
+	
+	<!--  운동법 상세 쿼리 -->
+	<select id="getExerciseDetail" resultType="ExerciseDTO">
+		SELECT EXER_SEQ, EXER_UPLOADNAME, EXER_TITLE, EXER_PATH, EXER_URL, EXER_CONTENT, EXER_CNT, EXER_UPDAY FROM EXERCISE WHERE EXER_SEQ = #{exer_seq}
+	</select>
+	
+	<!--  운동법 파일까지 수정 쿼리 -->
+	<update id="updateExerFile" parameterType="ExerciseDTO">
+		UPDATE EXERCISE SET EXER_TITLE=#{exer_title}, EXER_CONTENT=#{exer_content}, EXER_UPDAY=SYSDATE, EXER_URL=#{exer_url}, EXER_PATH=#{exer_path} WHERE EXER_SEQ=#{exer_seq}
+	</update>
+	
+	<!--  운동법 파일제외 수정 쿼리 -->
+	<update id="updateExerNoFile" parameterType="ExerciseDTO">
+		UPDATE EXERCISE SET EXER_TITLE=#{exer_title}, EXER_CONTENT=#{exer_content}, EXER_UPDAY=SYSDATE WHERE EXER_SEQ=#{exer_seq}
+	</update>
+	
+	<!--  운동법 파일제외 수정 쿼리 -->
+	<update id="updateExerCnt" parameterType="ExerciseDTO">
+		UPDATE EXERCISE SET EXER_CNT=EXER_CNT + 1 WHERE EXER_SEQ=#{exer_seq}
+	</update>
+	
+	<!-- 운동법 삭제 쿼리 -->
+	<delete id="deleteExer" parameterType="ExerciseDTO">
+		DELETE FROM EXERCISE WHERE EXER_SEQ=#{exer_seq}
+	</delete>
+</mapper>

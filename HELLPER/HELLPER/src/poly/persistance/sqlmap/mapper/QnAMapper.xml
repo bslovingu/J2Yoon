@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="poly.persistance.mapper.QnAMapper">
+	<!-- qna 리스트 쿼리 -->
+	<select id="getAllQna" resultType="QnADTO">
+		SELECT QNA_SEQ, QNA_TITLE,
+		QNA_CONTENT, QNA_UPLOADNAME, QNA_CNT, QNA_UPDAY FROM QNA ORDER BY
+		QNA_SEQ DESC
+	</select>
+
+	<!-- qna 작성 쿼리 -->
+	<insert parameterType="QnADTO" id="insertQnA">
+		INSERT INTO QNA
+		(
+		QNA_SEQ, QNA_TITLE, QNA_CONTENT, QNA_UPLOADNAME, QNA_UPDAY, QNA_CNT
+		)
+		VALUES
+		(
+		QNA_SEQ.NEXTVAL, #{qna_title}, #{qna_content}, #{qna_uploadname}, SYSDATE, 0
+		)
+	</insert>
+	<!-- QnA상세보기 쿼리 -->
+	<select id="getQnADetail" resultType="QnADTO"
+		parameterType="QnADTO">
+		SELECT QNA_SEQ, QNA_TITLE, QNA_CONTENT, QNA_UPLOADNAME,
+		QNA_CNT, QNA_UPDAY FROM QNA WHERE QNA_SEQ = #{qna_seq}
+	</select>
+
+
+	<!-- qna 삭제 쿼리 -->
+	<delete id="deleteQnA" parameterType="QnADTO">
+		DELETE FROM QNA WHERE
+		QNA_SEQ=#{qna_seq}
+	</delete>
+
+	<!-- qna 수정 쿼리 -->
+	<update id="updateQnA" parameterType="QnADTO">
+		UPDATE QNA SET
+		QNA_TITLE=#{qna_title}, QNA_CONTENT=#{qna_content}, QNA_UPDAY=SYSDATE
+		WHERE QNA_SEQ=#{qna_seq}
+	</update>
+
+	<!-- qna 수정 쿼리 -->
+	<update id="updateQnACnt" parameterType="QnADTO">
+		UPDATE QNA SET
+		QNA_CNT=QNA_CNT + 1 WHERE QNA_SEQ=#{qna_seq}
+	</update>
+
+	<!-- qna 작성 쿼리 -->
+	<insert parameterType="QnADTO" id="insertUserQnA">
+		INSERT INTO QNA
+		(
+		QNA_SEQ, QNA_TITLE, QNA_CONTENT, QNA_UPLOADNAME, QNA_UPDAY, QNA_CNT
+		)
+		VALUES
+		(
+		QNA_SEQ.NEXTVAL, #{qna_title}, #{qna_content}, #{qna_uploadname}, SYSDATE, 0
+		)
+	</insert>
+
+	<!-- qna 삭제 쿼리 -->
+	<delete id="deleteUserQnA" parameterType="QnADTO">
+		DELETE FROM QNA WHERE
+		QNA_SEQ=#{qna_seq}
+	</delete>
+
+	<!-- qna 수정 쿼리 -->
+	<update id="updateUserQnA" parameterType="QnADTO">
+		UPDATE QNA SET
+		QNA_TITLE=#{qna_title}, QNA_CONTENT=#{qna_content}, QNA_UPDAY=SYSDATE
+		WHERE QNA_SEQ=#{qna_seq}
+	</update>
+
+	<!-- qna 갯수 조회 쿼리 -->
+	<select id="getQnaTotal" resultType="int">
+		SELECT COUNT(*)
+		FROM QNA
+	</select>
+
+	<!-- qna 리스트 쿼리 -->
+	<select id="getQnaList" parameterType="QnADTO"
+		resultType="QnADTO">
+		<![CDATA[
+		SELECT 
+		QNA_SEQ, 
+		QNA_TITLE, 
+		QNA_CONTENT, 
+		QNA_UPLOADNAME, 
+		QNA_CNT, 
+		QNA_UPDAY
+		FROM (
+			SELECT A.* , ROWNUM as RNUM
+			FROM
+      		(
+        SELECT *
+        FROM QNA
+			ORDER BY QNA_SEQ DESC
+      )A
+			WHERE ROWNUM <= #{endNum}
+		)
+		WHERE RNUM>=#{startNum}
+		]]>
+	</select>
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="poly.persistance.mapper.SpofacMapper">
+	<select id="getFacList" resultType="SPOFACDTO">
+		SELECT FAC_NAME, SPO_KIND,
+		FAC_LOC, LOC_W, LOC_K
+		FROM SPOFAC
+	</select>
+	<!-- 시설 갯수조회 쿼리 -->
+	<select id="getFacTotal" resultType="int">
+		SELECT COUNT(*)
+		FROM SPOFAC
+	</select>
+	
+	<!-- qna 리스트 쿼리 -->
+	<select id="getFacilityList" parameterType="SPOFACDTO"
+		resultType="SPOFACDTO">
+		<![CDATA[
+		SELECT 
+		FAC_SEQ, 
+		LOC_GU, 
+		SPO_KIND, 
+		FAC_NAME, 
+		FAC_LOC, 
+		LOC_W,
+		LOC_K
+		FROM (
+			SELECT A.* , ROWNUM as RNUM
+			FROM
+      		(
+        SELECT *
+        FROM SPOFAC
+			ORDER BY LENGTH(FAC_SEQ) ASC, FAC_SEQ ASC
+      )A
+			WHERE ROWNUM <= #{endNum}
+		)
+		WHERE RNUM>=#{startNum}
+		]]>
+	</select>
+</mapper>
