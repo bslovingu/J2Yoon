@@ -9,6 +9,7 @@ public class EventDTO {
 	String event_uploadname;
 	String event_cnt;
 	String event_upday;
+	
 	public String getEvent_seq() {
 		return event_seq;
 	}

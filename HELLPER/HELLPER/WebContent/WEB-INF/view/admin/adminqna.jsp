@@ -196,8 +196,7 @@
 							<div class="table_1st div_content_box"><%=qlist.get(i).getQna_seq()%></div>
 							<div class="table_2nd div_content_box">
 								<a
-									href="/userqna/userqnadetail.do?qseq=<%=qlist.get(i).getQna_seq()%>"><%=qlist.get(i).getQna_title().replaceAll("& #40;", "(").replaceAll("& #41;", ")")
-						.replaceAll("& gt;", ">").replaceAll("& lt;", "<")%></a>
+									href="/userqna/userqnadetail.do?qseq=<%=qlist.get(i).getQna_seq()%>"><%=qlist.get(i).getQna_title()%></a>
 							</div>
 							<div class="table_3rd div_content_box"><%=qlist.get(i).getQna_cnt()%></div>
 							<div class="table_4th div_content_box"><%=qlist.get(i).getQna_uploadname()%></div>

@@ -6,17 +6,17 @@
 	<insert parameterType="MemberDTO" id="insertMember"> 
 		INSERT INTO MEMBER
 		 ( 
-		 	MEM_SEQ, NAME, EMAIL, PASSWORD, PHONE
+		 	MEM_SEQ, NAME, EMAIL, PASSWORD, PHONE, STATUS
 		 ) 
 		 VALUES 
 		 ( 
-		 	MEM_SEQ.NEXTVAL, #{name}, #{email}, #{password}, #{phone}
+		 	MEM_SEQ.NEXTVAL, #{name}, #{email}, #{password}, #{phone}, 0
 		 ) 
 	</insert>
 			<!-- (DBMS_CRYPTO.HASH(TO_CLOB(#{password}), 1)) -->
 	<!-- 로그인 쿼리 -->
 	<select id="getLogin" resultType="MemberDTO">
-		SELECT MEM_SEQ, NAME, EMAIL, PASSWORD, PHONE
+		SELECT MEM_SEQ, NAME, EMAIL, PASSWORD, PHONE, STATUS
 		  FROM MEMBER
 		 WHERE EMAIL=#{email}
 		   AND PASSWORD = #{password}
@@ -45,7 +45,7 @@
 	
 	<!-- 회원 상세 정보 쿼리 -->
 	<select id="getMemberDetail" resultType="MemberDTO">
-		SELECT MEM_SEQ, PASSWORD, NAME, EMAIL, PHONE FROM MEMBER WHERE MEM_SEQ=#{mem_seq}
+		SELECT MEM_SEQ, PASSWORD, NAME, EMAIL, PHONE, STATUS FROM MEMBER WHERE MEM_SEQ=#{mem_seq}
 	</select>
 	
 	<!-- 회원 정보 수정 쿼리 -->
@@ -100,4 +100,14 @@
 	<select id="getMembertotal" resultType="int">
 		SELECT COUNT(*) FROM MEMBER 
 	</select>
+	
+	<!-- 회원 정지 쿼리 -->
+	<update id="setMemberStop" parameterType="String">
+		UPDATE MEMBER SET STATUS=1 WHERE MEM_SEQ=#{mem_seq}
+	</update>
+	
+	<!-- 회원 정지 해제 쿼리 -->
+	<update id="setMemberStart" parameterType="String">
+		UPDATE MEMBER SET STATUS=0 WHERE MEM_SEQ=#{mem_seq}
+	</update>
 </mapper>

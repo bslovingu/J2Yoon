@@ -1,6 +1,9 @@
 package poly.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -16,6 +19,7 @@ import poly.dto.CommentDTO;
 import poly.dto.QnADTO;
 import poly.service.ICommentService;
 import poly.util.EncryptUtil;
+import poly.util.FilterUtil;
 
 @Controller
 public class UserCommentController {
@@ -31,11 +35,10 @@ public class UserCommentController {
 		log.info(this.getClass().getName() + ".userQnACommInsert start!");
 		String qseq = request.getParameter("qseq");
 		log.info("qseq : " + qseq);
-		String user_email = EncryptUtil.decAES128CBC(request.getParameter("user_email"));
+		String user_email = request.getParameter("user_email");
 		log.info("user_email : " + user_email);
 		String content = request.getParameter("comment");
 		log.info("comment : " + content);
-		content = content.replaceAll("\r\n", "<br>");
 		CommentDTO cdto = new CommentDTO();
 		cdto.setComm_content(content);
 		cdto.setQna_seq(qseq);
@@ -52,7 +55,21 @@ public class UserCommentController {
 		qdto.setEndNum(CPgNum * 10);
 
 		qdto = commentService.insertUserComment(cdto, qdto);
+		qdto = FilterUtil.QnAFilter(qdto);
 
+		List<CommentDTO> clist = qdto.getClist();
+		Iterator<CommentDTO> it = clist.iterator();
+		
+		clist = null;
+		clist = new ArrayList<CommentDTO>();
+		
+		FilterUtil fu = new FilterUtil();
+		while(it.hasNext()) {
+			clist.add(fu.CommentFilter(it.next()));
+		}
+			
+		qdto.setClist(clist);
+		
 		model.addAttribute("qdto", qdto);
 		model.addAttribute("CPgNum",CPgNum);
 		model.addAttribute("Ctotal",Ctotal);

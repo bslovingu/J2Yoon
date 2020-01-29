@@ -179,5 +179,17 @@ public class MemberService implements IMemberService{
 		return MemberMapper.getMemberInfo(mdto);
 	}
 
+	@Override
+	public int setMemberStop(String mem_seq) throws Exception {
+		// TODO Auto-generated method stub
+		return MemberMapper.setMemberStop(mem_seq);
+	}
+
+	@Override
+	public int setMemberStart(String mem_seq) throws Exception {
+		// TODO Auto-generated method stub
+		return MemberMapper.setMemberStart(mem_seq);
+	}
+
 	
 }

@@ -12,5 +12,7 @@
 		<typeAlias type="poly.dto.NoticeDTO" alias="NoticeDTO"/>
 		<typeAlias type="poly.dto.SPOFACDTO" alias="SPOFACDTO"/>
 		<typeAlias type="poly.dto.QnADTO" alias="QnADTO"/>
+		<typeAlias type="poly.dto.ReservationDTO" alias="ReservationDTO"/>
+		<typeAlias type="poly.dto.ReservDetailDTO" alias="ReservDetailDTO"/>
     </typeAliases>
 </configuration>

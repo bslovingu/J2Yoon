@@ -2,12 +2,13 @@
 <%@page import="poly.dto.QnADTO"%>
 <%@page import="java.util.List"%>
 <%@page import="poly.dto.NoticeDTO"%>
+<%@page import="poly.util.EncryptUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
 <%
 	QnADTO qnadetail = (QnADTO) request.getAttribute("qdto");
-	String user_email = (String) session.getAttribute("SS_USER_EMAIL");
+	String user_email = EncryptUtil.decAES128CBC((String) session.getAttribute("SS_USER_EMAIL"));
 	CommentDTO commupdateform = (CommentDTO) request.getAttribute("commupdateform");
 	String user_name = (String) session.getAttribute("SS_USER_NAME");
 	int CPgNum = (int) request.getAttribute("CPgNum");
@@ -43,12 +44,14 @@
     <![endif]-->
 
 <style type="text/css">
-.Comm_uploadname{
+.Comm_uploadname {
 	width: 30%;
 }
-.Comm_content{
+
+.Comm_content {
 	width: 68%;
 }
+
 .Qna_num {
 	width: 10%;
 }
@@ -105,6 +108,42 @@ hr {
 
 <body id="page-top" class="index">
 
+	<%
+		if (user_email.equals("sincethe1997@naver.com")) {
+	%>
+	<!-- Navigation -->
+	<nav id="mainNav"
+		class="navbar navbar-default navbar-fixed-top navbar-custom">
+		<div class="container">
+			<div class="navbar-header page-scroll">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span> Menu <i
+						class="fa fa-bars"></i>
+				</button>
+				<a class="navbar-brand" href="/admin/adminmain.do"><font
+					size="7">SPORnSER</font></a>
+			</div>
+
+			<div class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#"><%=user_name%> 관리자님 환영합니다.</a></li>
+					<li class="page-scroll"><a href="/admin/NoticeList.do">공지사항</a></li>
+					<li class="page-scroll"><a href="/userevent/usereventlist.do">체육시설
+							조회 및 예약</a></li>
+					<li class="page-scroll"><a href="/userqna/userqnalist.do">신고게시판</a>
+					</li>
+					<li class="page-scroll"><a href="/member/logout.do"><font
+							size="1">logout</font></a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<%
+		} else {
+	%>
 	<nav id="mainNav"
 		class="navbar navbar-default navbar-fixed-top navbar-custom">
 		<div class="container">
@@ -125,11 +164,8 @@ hr {
 					<li class="page-scroll"><a
 						href="/usernotice/usernoticelist.do">공지사항</a></li>
 					<li class="page-scroll"><a href="/userevent/usereventlist.do">체육시설
-							조회</a></li>
-					<li class="page-scroll"><a
-						href="/userexercise/userexerlist.do">체육시설 예약정보</a></li>
-					<li class="page-scroll"><a href="/userqna/userqnalist.do">신고게시판</a>
-					</li>
+							조회 및 예약</a></li>
+					<li class="page-scroll"><a href="/userqna/userqnalist.do">신고게시판</a></li>
 					<li class="page-scroll"><a href="/member/logout.do"><font
 							size="1">logout</font></a></li>
 				</ul>
@@ -137,18 +173,27 @@ hr {
 		</div>
 	</nav>
 
-	<!--------------------------------------------------------------------------Header start---------------------------------------------------------------------------------------->
 
+	<%
+		}
+	%>
+
+	<!-- Header -->
 	<header>
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
-					<div class="intro-text"></div>
+					<div class="intro-text">
+						<hr class="star-light">
+						<span class="name">S P O R n S E R</span>
+						<hr class="star-light">
+						<span class="skills">시설 사용시간 : 08:00 ~ 22:00 </span> <br> <span
+							class="skills">예약/예약취소 가능시간 : 당일예약/취소 </span>
+					</div>
 				</div>
 			</div>
 		</div>
 	</header>
-
 	<!--------------------------------------------------------------------------Header end------------------------------------------------------------------------------------------>
 
 	<!--------------------------------------------------------------------------QnA detail start------------------------------------------------------------------------------------------>
@@ -170,7 +215,7 @@ hr {
 								class="form-group col-xs-12 floating-label-form-group controls">
 								<label>Title</label>
 								<p class="help-block text-danger">제목</p>
-								<%=qnadetail.getQna_title().replaceAll("& #40;", "(").replaceAll("& #41;", ")").replaceAll("& gt;", ">").replaceAll("& lt;", "<")%>
+								<%=qnadetail.getQna_title()%>
 							</div>
 						</div>
 						<div class="row control-group">
@@ -178,7 +223,7 @@ hr {
 								class="form-group col-xs-12 floating-label-form-group controls">
 								<label>Message</label>
 								<p class="help-block text-danger">내용</p>
-								<%=qnadetail.getQna_content().replaceAll("& #40;", "(").replaceAll("& #41;", ")").replaceAll("& gt;", ">").replaceAll("& lt;", "<")%>
+								<%=qnadetail.getQna_content()%>
 							</div>
 						</div>
 						<br>
@@ -191,7 +236,7 @@ hr {
 							class="btn btn-success btn-lg">목록</button></a>
 
 					<%
-						if (user_email.equals(qnadetail.getQna_uploadname())) {
+						if (user_email.equals(EncryptUtil.decAES128CBC(qnadetail.getQna_uploadname()))) {
 					%>
 					<a
 						href="/userqna/updateuserqnaform.do?qseq=<%=qnadetail.getQna_seq()%>"><button
@@ -270,7 +315,7 @@ hr {
 									%>
 									<div style="display: flex; justify-content: space-between;">
 										<div class="Comm_uploadname"><%=qnadetail.getClist().get(i).getComm_uploadname()%></div>
-										<div class="Comm_content"><%=qnadetail.getClist().get(i).getComm_content().replaceAll("& #40;", "(").replaceAll("& #41;", ")").replaceAll("& gt;", ">").replaceAll("& lt;", "<")%></div>
+										<div class="Comm_content"><%=qnadetail.getClist().get(i).getComm_content()%></div>
 									</div>
 									<%
 										}
@@ -303,8 +348,18 @@ hr {
 										<%
 											for (int i = CstartPage; i <= CtotalPage; i++) {
 										%>
+										<%
+											if (i == CPgNum) {
+										%>
+										<li><span style="background-color: #18BC9C"><%=i%></span></li>
+										<%
+											} else {
+										%>
 										<li><span><a
 												href="/userqna/userqnadetail.do?CPgNum=<%=i%>&qseq=<%=qnadetail.getQna_seq()%>"><%=i%></a></span></li>
+										<%
+											}
+										%>
 										<%
 											}
 										%>
@@ -314,8 +369,18 @@ hr {
 										<%
 											for (int i = CstartPage; i <= CstartPage + 4; i++) {
 										%>
+										<%
+											if (i == CPgNum) {
+										%>
+										<li><span style="background-color: #18BC9C"><%=i%></span></li>
+										<%
+											} else {
+										%>
 										<li><span><a
 												href="/userqna/userqnadetail.do?CPgNum=<%=i%>&qseq=<%=qnadetail.getQna_seq()%>"><%=i%></a></span></li>
+										<%
+											}
+										%>
 										<%
 											}
 										%>

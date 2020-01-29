@@ -9,8 +9,8 @@
 	String user_mail = EncryptUtil.decAES128CBC((String) session.getAttribute("SS_USER_EMAIL"));
 	String user_name = (String) session.getAttribute("SS_USER_NAME");
 	List<QnADTO> qlist = (List<QnADTO>) request.getAttribute("qlist");
-	int PgNum = (int)request.getAttribute("PgNum");
-	int total = (int)request.getAttribute("total");
+	int PgNum = (int) request.getAttribute("PgNum");
+	int total = (int) request.getAttribute("total");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,53 +56,56 @@
 	padding-top: 12px;
 	padding-bottom: 12px;
 }
+
 .table_1st {
-   width: 60px;
-   text-align: center;
+	width: 60px;
+	text-align: center;
 }
 
 .table_2nd {
 	text-align: center;
-
 }
 
 .table_3rd {
-   width: 60px;
-   text-align: center;
+	width: 60px;
+	text-align: center;
 }
 
 .table_4th {
-   width: 240px;
-   text-align: center;
+	width: 240px;
+	text-align: center;
 }
 
 .table_5th {
-  width: 140px;
-   text-align: center;
-}
-.pagingBox{
-	width:100%;
-	font-size: 16px;
-}
-.pagingBox ul{
-	padding:0;
-	margin:0;
+	width: 140px;
+	text-align: center;
 }
 
-.pagingBox ul li{
-    display: inline-block;
-    margin-bottom: 4px;
-    font-weight: 400;
+.pagingBox {
+	width: 100%;
+	font-size: 16px;
 }
+
+.pagingBox ul {
+	padding: 0;
+	margin: 0;
+}
+
+.pagingBox ul li {
+	display: inline-block;
+	margin-bottom: 4px;
+	font-weight: 400;
+}
+
 .pagingBox ul li a, .pagingBox ul li span {
-    color: #2C3E50;
-    text-align: center;
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    border-radius: 50%;
-    border: 1px solid #e6e6e6;
+	color: #2C3E50;
+	text-align: center;
+	display: inline-block;
+	width: 40px;
+	height: 40px;
+	line-height: 40px;
+	border-radius: 50%;
+	border: 1px solid #e6e6e6;
 }
 </style>
 
@@ -130,14 +133,10 @@
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="/notice/admincommunity.do#"><%=user_name%>
-							관리자님 환영합니다.</a></li>
-					<li class="page-scroll"><a
-						href="/notice/admincommunity.do#notice">공지사항</a></li>
-					<li class="page-scroll"><a
-						href="/notice/admincommunity.do#event">체육시설 조회</a></li>
-					<li class="page-scroll"><a href="/exercise/adminexercise.do">체육시설
-							예약정보</a></li>
+					<li><a href="#"><%=user_name%> 관리자님 환영합니다.</a></li>
+					<li class="page-scroll"><a href="/admin/NoticeList.do">공지사항</a></li>
+					<li class="page-scroll"><a href="/userevent/usereventlist.do">체육시설
+							조회 및 예약</a></li>
 					<li class="page-scroll"><a href="/userqna/userqnalist.do">신고게시판</a>
 					</li>
 					<li class="page-scroll"><a href="/member/logout.do"><font
@@ -170,10 +169,8 @@
 					<li class="page-scroll"><a
 						href="/usernotice/usernoticelist.do">공지사항</a></li>
 					<li class="page-scroll"><a href="/userevent/usereventlist.do">체육시설
-							조회</a></li>
-					<li class="page-scroll"><a
-						href="/userexercise/userexerlist.do">체육시설 예약정보</a></li>
-					<li class="page-scroll"><a href="#qna">신고게시판</a></li>
+							조회 및 예약</a></li>
+					<li class="page-scroll"><a href="/userqna/userqnalist.do">신고게시판</a></li>
 					<li class="page-scroll"><a href="/member/logout.do"><font
 							size="1">logout</font></a></li>
 				</ul>
@@ -186,18 +183,22 @@
 		}
 	%>
 
-	<!--------------------------------------------------------------------------Header start---------------------------------------------------------------------------------------->
-
+	<!-- Header -->
 	<header>
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
-					<div class="intro-text"></div>
+					<div class="intro-text">
+						<hr class="star-light">
+						<span class="name">S P O R n S E R</span>
+						<hr class="star-light">
+						<span class="skills">시설 사용시간 : 08:00 ~ 22:00 </span> <br> <span
+							class="skills">예약/예약취소 가능시간 : 당일예약/취소 </span>
+					</div>
 				</div>
 			</div>
 		</div>
 	</header>
-
 	<!--------------------------------------------------------------------------Header end------------------------------------------------------------------------------------------>
 
 	<!--------------------------------------------------------------------------QnA start------------------------------------------------------------------------------------------>
@@ -210,19 +211,19 @@
 					<hr class="star-primary">
 				</div>
 				<div class="row">
-				<div class="div_content_container"
-					style="color: #666666; font-weight: bold;">
-					<div style="display: table-row;">
-						<div class="table_1st div_content_box">글번호</div>
-						<div class="table_2nd div_content_box">제목</div>
-						<div class="table_3rd div_content_box">조회수</div>
-						<div class="table_4th div_content_box">글쓴이</div>
-						<div class="table_5th div_content_box">날짜</div>
+					<div class="div_content_container"
+						style="color: #666666; font-weight: bold;">
+						<div style="display: table-row;">
+							<div class="table_1st div_content_box">글번호</div>
+							<div class="table_2nd div_content_box">제목</div>
+							<div class="table_3rd div_content_box">조회수</div>
+							<div class="table_4th div_content_box">글쓴이</div>
+							<div class="table_5th div_content_box">날짜</div>
+						</div>
 					</div>
-				</div>
 					<hr>
 					<div class="div_content_container"
-					style="color: #666666; font-weight: bold;">
+						style="color: #666666; font-weight: bold;">
 						<%
 							for (int i = 0; i < qlist.size(); i++) {
 						%>
@@ -230,7 +231,7 @@
 							<div class="table_1st div_content_box"><%=qlist.get(i).getQna_seq()%></div>
 							<div class="table_2nd div_content_box">
 								<a
-									href="/userqna/userqnadetail.do?qseq=<%=qlist.get(i).getQna_seq()%>"><%=qlist.get(i).getQna_title().replaceAll("& #40;", "(").replaceAll("& #41;", ")").replaceAll("& gt;", ">").replaceAll("& lt;", "<")%></a>
+									href="/userqna/userqnadetail.do?qseq=<%=qlist.get(i).getQna_seq()%>"><%=qlist.get(i).getQna_title()%></a>
 							</div>
 							<div class="table_3rd div_content_box"><%=qlist.get(i).getQna_cnt()%></div>
 							<div class="table_4th div_content_box"><%=qlist.get(i).getQna_uploadname()%></div>
@@ -240,35 +241,86 @@
 							}
 						%>
 					</div>
-					<div class="pagingBox" style="margin-top:15px; margin-bottom:15px;">
+					<div class="pagingBox"
+						style="margin-top: 15px; margin-bottom: 15px;">
 						<ul style="list-style: none;">
-						<% 
-							int totalPage = (total-1)/10+1;
-							int startPage = ((PgNum-1)/5)*5+1;
-							int temp = ((totalPage-1)/5)*5+1;
-						%>
-						<!-- < 이전 찍기 -->
-						<% if(PgNum==1){ %>
+							<%
+								int totalPage = (total - 1) / 10 + 1;
+								int startPage = ((PgNum - 1) / 5) * 5 + 1;
+								int temp = ((totalPage - 1) / 5) * 5 + 1;
+							%>
+							<!-- < 이전 찍기 -->
+							<%
+								if (PgNum == 1) {
+							%>
 							<li><span><</span></li>
-						<%} else {%>
-							<li><span><a href="/userqna/userqnalist.do?PgNum=<%=PgNum-1%>"><</a></span></li>
-						<%} %>
-						<!-- 숫자 찍기 -->
-						<%if(startPage==temp){ %>
-						<%for(int i = startPage;i<=totalPage;i++){ %>
-							<li><span><a href="/userqna/userqnalist.do?PgNum=<%=i%>"><%=i %></a></span></li>
-						<%} %>
-						<%}else{ %>
-						<%for(int i = startPage;i<=startPage+4;i++){ %>
-							<li><span><a href="/userqna/userqnalist.do?PgNum=<%=i%>"><%=i %></a></span></li>
-						<%} %>
-						<%} %>
-						<!-- > 다음 찍기 -->
-						<% if(PgNum==totalPage){%>
+							<%
+								} else {
+							%>
+							<li><span><a
+									href="/userqna/userqnalist.do?PgNum=<%=PgNum - 1%>"><</a></span></li>
+							<%
+								}
+							%>
+							<!-- 숫자 찍기 -->
+							<%
+								if (startPage == temp) {
+							%>
+							<%
+								for (int i = startPage; i <= totalPage; i++) {
+							%>
+							<%
+								if (i == PgNum) {
+							%>
+							<li><span style="background-color: #18BC9C"><%=i%></span></li>
+							<%
+								} else {
+							%>
+							<li><span><a
+									href="/userqna/userqnalist.do?PgNum=<%=i%>"><%=i%></a></span></li>
+							<%
+								}
+							%>
+							<%
+								}
+							%>
+							<%
+								} else {
+							%>
+							<%
+								for (int i = startPage; i <= startPage + 4; i++) {
+							%>
+							<%
+								if (i == PgNum) {
+							%>
+							<li><span style="background-color: #18BC9C"><%=i%></span></li>
+							<%
+								} else {
+							%>
+							<li><span><a
+									href="/userqna/userqnalist.do?PgNum=<%=i%>"><%=i%></a></span></li>
+							<%
+								}
+							%>
+							<%
+								}
+							%>
+							<%
+								}
+							%>
+							<!-- > 다음 찍기 -->
+							<%
+								if (PgNum == totalPage) {
+							%>
 							<li><span>></span></li>
-						<%}else{%>
-							<li><span><a href="/userqna/userqnalist.do?PgNum=<%=PgNum+1%>">></a></span></li>
-						<%} %>
+							<%
+								} else {
+							%>
+							<li><span><a
+									href="/userqna/userqnalist.do?PgNum=<%=PgNum + 1%>">></a></span></li>
+							<%
+								}
+							%>
 						</ul>
 					</div>
 				</div>

@@ -13,6 +13,9 @@ public interface SpofacMapper {
 	List<SPOFACDTO> getFacList();
 	public int getFacTotal() throws Exception;
 	List<SPOFACDTO> getFacilityList(@Param("startNum")int startNum, @Param("endNum")int endNum);
+	int getFacCount(SPOFACDTO pDTO)throws Exception;
+	List<SPOFACDTO> getFacilitySearchList(SPOFACDTO pDTO)throws Exception;
+	SPOFACDTO getSpofacInfo(String fseq)throws Exception; 
 
 	
 }

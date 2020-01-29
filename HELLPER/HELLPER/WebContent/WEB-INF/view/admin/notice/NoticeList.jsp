@@ -1,15 +1,27 @@
-<%@page import="java.util.List"%>
+<%@page import="poly.dto.CommentDTO"%>
+<%@page import="poly.dto.QnADTO"%>
+<%@page import="poly.dto.EventDTO"%>
+<%@page import="poly.dto.MemberDTO"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="poly.dto.NoticeDTO"%>
-<%@page import="poly.util.EncryptUtil" %>
+<%@page import="java.util.List"%>
+<%@page import="poly.util.EncryptUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
 <%
+	String user_email = EncryptUtil.decAES128CBC((String) session.getAttribute("SS_USER_EMAIL"));
 	String user_name = (String) session.getAttribute("SS_USER_NAME");
-	String user_mail = EncryptUtil.decAES128CBC((String) session.getAttribute("SS_USER_EMAIL"));
+
 	List<NoticeDTO> nlist = (List<NoticeDTO>) request.getAttribute("nlist");
-	int NPgNum = (int) request.getAttribute("NPgNum");
-	int Ntotal = (int) request.getAttribute("Ntotal");
+
+	int NPgNum = 1;
+	if (request.getAttribute("NPgNum") != null) {
+		NPgNum = (int) request.getAttribute("NPgNum");
+	}
+	int Ntotal = 1;
+	if (request.getAttribute("Ntotal") != null) {
+		Ntotal = (int) request.getAttribute("Ntotal");
+	}
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,12 +47,17 @@
 <link
 	href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic"
 	rel="stylesheet" type="text/css">
+
 <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
 <style type="text/css">
+.chart-area {
+	height: 350px;
+}
+
 .div_content_container {
 	display: table;
 	table-layout: fixed;
@@ -57,29 +74,29 @@
 	padding-top: 12px;
 	padding-bottom: 12px;
 }
+
 .table_1st {
-   width: 60px;
-   text-align: center;
+	width: 60px;
+	text-align: center;
 }
 
 .table_2nd {
 	text-align: center;
-
 }
 
 .table_3rd {
-   width: 60px;
-   text-align: center;
+	width: 60px;
+	text-align: center;
 }
 
 .table_4th {
-   width: 240px;
-   text-align: center;
+	width: 240px;
+	text-align: center;
 }
 
 .table_5th {
-  width: 140px;
-   text-align: center;
+	width: 140px;
+	text-align: center;
 }
 
 .pagingBox {
@@ -116,7 +133,7 @@
 
 	<!-- Navigation -->
 	<%
-		if (user_mail.equals("sincethe1997@naver.com")) {
+		if (user_email.equals("sincethe1997@naver.com")) {
 	%>
 	<!-- Navigation -->
 	<nav id="mainNav"
@@ -137,7 +154,8 @@
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="#"><%=user_name%> 관리자님 환영합니다.</a></li>
 					<li class="page-scroll"><a href="/admin/NoticeList.do">공지사항</a></li>
-					<li class="page-scroll"><a href="/userevent/usereventlist.do">체육시설 조회 및 예약</a></li>
+					<li class="page-scroll"><a href="/userevent/usereventlist.do">체육시설
+							조회 및 예약</a></li>
 					<li class="page-scroll"><a href="/userqna/userqnalist.do">신고게시판</a>
 					</li>
 					<li class="page-scroll"><a href="/member/logout.do"><font
@@ -202,6 +220,8 @@
 	</header>
 	<!--------------------------------------------------------------------------Header end------------------------------------------------------------------------------------------>
 
+	<!--------------------------------------------------------------------------notice list start----------------------------------------------------------------------------------------->
+
 	<section id="notice">
 		<div class="container" style="margin: auto; text-align: center;">
 			<div class="row">
@@ -211,7 +231,7 @@
 				</div>
 			</div>
 			<div class="row">
-							<div class="div_content_container"
+				<div class="div_content_container"
 					style="color: #666666; font-weight: bold;">
 					<div style="display: table-row;">
 						<div class="table_1st div_content_box">글번호</div>
@@ -221,7 +241,6 @@
 						<div class="table_5th div_content_box">날짜</div>
 					</div>
 				</div>
-				<hr>
 				<div class="div_content_container"
 					style="color: #666666; font-weight: bold;">
 					<%
@@ -231,7 +250,7 @@
 						<div class="table_1st div_content_box"><%=nlist.get(i).getNotice_seq()%></div>
 						<div class="table_2nd div_content_box">
 							<a
-								href="/usernotice/usernoticedetail.do?nseq=<%=nlist.get(i).getNotice_seq()%>"><%=nlist.get(i).getNotice_title()%></a>
+								href="/admin/NoticeDetail.do?nseq=<%=nlist.get(i).getNotice_seq()%>"><%=nlist.get(i).getNotice_title()%></a>
 						</div>
 						<div class="table_3rd div_content_box"><%=nlist.get(i).getNotice_cnt()%></div>
 						<div class="table_4th div_content_box"><%=nlist.get(i).getNotice_uploadname()%></div>
@@ -241,7 +260,8 @@
 						}
 					%>
 				</div>
-				<div class="pagingBox" style="margin-top:15px; margin-bottom:15px;">
+				<div class="pagingBox"
+					style="margin-top: 15px; margin-bottom: 15px;">
 					<ul style="list-style: none;">
 						<%
 							int NtotalPage = (Ntotal - 1) / 10 + 1;
@@ -257,7 +277,7 @@
 							} else {
 						%>
 						<li><span><a
-								href="/usernotice/usernoticelist.do?NPgNum=<%=NPgNum - 1%>"><</a></span></li>
+								href="/admin/NoticeList.do?NPgNum=<%=NPgNum - 1%>"><</a></span></li>
 						<%
 							}
 						%>
@@ -269,14 +289,13 @@
 							for (int i = NstartPage; i <= NtotalPage; i++) {
 						%>
 						<%
-								if (i == NPgNum) {
-							%>
-							<li><span style="background-color: #18BC9C"><%=i%></span></li>
-							<%
-								} else {
-							%>
-						<li><span><a
-								href="/usernotice/usernoticelist.do?NPgNum=<%=i%>"><%=i%></a></span></li>
+							if (i == NPgNum) {
+						%>
+						<li><span style="background-color: #18BC9C"><%=i%></span></li>
+						<%
+							} else {
+						%>
+						<li><span><a href="/admin/NoticeList.do?NPgNum=<%=i%>"><%=i%></a></span></li>
 						<%
 							}
 						%>
@@ -290,14 +309,13 @@
 							for (int i = NstartPage; i <= NstartPage + 4; i++) {
 						%>
 						<%
-								if (i == NPgNum) {
-							%>
-							<li><span style="background-color: #18BC9C"><%=i%></span></li>
-							<%
-								} else {
-							%>
-						<li><span><a
-								href="/usernotice/usernoticelist.do?NPgNum=<%=i%>"><%=i%></a></span></li>
+							if (i == NPgNum) {
+						%>
+						<li><span style="background-color: #18BC9C"><%=i%></span></li>
+						<%
+							} else {
+						%>
+						<li><span><a href="/admin/NoticeList.do?NPgNum=<%=i%>"><%=i%></a></span></li>
 						<%
 							}
 						%>
@@ -316,19 +334,21 @@
 							} else {
 						%>
 						<li><span><a
-								href="/usernotice/usernoticelist.do?NPgNum=<%=NPgNum + 1%>">></a></span></li>
+								href="/admin/NoticeList.do?NPgNum=<%=NPgNum + 1%>">></a></span></li>
 						<%
 							}
 						%>
 					</ul>
 				</div>
+				<a href="/admin/NoticeReg.do"><button
+						class="btn btn-success btn-lg">글쓰기</button></a>
 			</div>
 		</div>
 	</section>
 
 	<!--------------------------------------------------------------------------notice list end------------------------------------------------------------------------------------------>
 
-	<!--------------------------------------------------------------------------footer start----------------------------------------------------------------------------------------->
+	<!--------------------------------------------------------------------------footer start------------------------------------------------------------------------------------------>
 	<footer>
 		<div class="text-center">
 			<div class="footer-above">
@@ -365,13 +385,6 @@
 	<script src="/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
 	<script src="/vendor/datatables-responsive/dataTables.responsive.js"></script>
 
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$('#dataTables-example').DataTable({
-				responsive : true
-			});
-		});
-	</script>
-</body>
 
+</body>
 </html>

@@ -2,12 +2,13 @@
 <%@page import="poly.dto.EventDTO"%>
 <%@page import="java.util.List"%>
 <%@page import="poly.dto.NoticeDTO"%>
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@page import="poly.util.EncryptUtil"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
 <%
 	String user_name = (String) session.getAttribute("SS_USER_NAME");
-
+	String user_mail = EncryptUtil.decAES128CBC((String) session.getAttribute("SS_USER_EMAIL"));
 	List<SPOFACDTO> elist = (List<SPOFACDTO>) request.getAttribute("elist");
 	int FPgNum = (int) request.getAttribute("FPgNum");
 	int Ftotal = (int) request.getAttribute("Ftotal");
@@ -36,7 +37,7 @@
 <link
 	href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic"
 	rel="stylesheet" type="text/css">
-	<link rel="stylesheet" type="text/css"
+<link rel="stylesheet" type="text/css"
 	href="/resources/app-assets/css/bootstrap.css">
 <!-- font icons-->
 <link rel="stylesheet" type="text/css"
@@ -158,11 +159,55 @@
 	transition-duration: 500ms;
 }
 </style>
+<script>
+	function test() {
+		var gu = $("#sel1 option:selected").text();
+		var type = $("#sel2 option:selected").text();
 
+		location.href = "/userevent/usereventSearch.do?gu=" + gu + "&type="
+				+ type;
+	}
+</script>
 </head>
 
 <body id="page-top" class="index">
 
+	<%
+		if (user_mail.equals("sincethe1997@naver.com")) {
+	%>
+	<!-- Navigation -->
+	<nav id="mainNav"
+		class="navbar navbar-default navbar-fixed-top navbar-custom">
+		<div class="container">
+			<div class="navbar-header page-scroll">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span> Menu <i
+						class="fa fa-bars"></i>
+				</button>
+				<a class="navbar-brand" href="/admin/adminmain.do"><font
+					size="7">SPORnSER</font></a>
+			</div>
+
+			<div class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#"><%=user_name%> 관리자님 환영합니다.</a></li>
+					<li class="page-scroll"><a href="/admin/NoticeList.do">공지사항</a></li>
+					<li class="page-scroll"><a href="/userevent/usereventlist.do">체육시설
+							조회 및 예약</a></li>
+					<li class="page-scroll"><a href="/userqna/userqnalist.do">신고게시판</a>
+					</li>
+					<li class="page-scroll"><a href="/member/logout.do"><font
+							size="1">logout</font></a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<%
+		} else {
+	%>
 	<nav id="mainNav"
 		class="navbar navbar-default navbar-fixed-top navbar-custom">
 		<div class="container">
@@ -178,81 +223,133 @@
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav navbar-right">
-					<li class="page-scroll"><a href="/user/usermain.do"><%=user_name + "�� ȯ���մϴ�."%></a>
+					<li class="page-scroll"><a href="/user/usermain.do"><%=user_name + "님 환영합니다."%></a>
 					</li>
 					<li class="page-scroll"><a
-						href="/usernotice/usernoticelist.do">��������</a></li>
-					<li class="page-scroll"><a href="#event">ü���ü� ��ȸ</a></li>
-					<li class="page-scroll"><a
-						href="/userexercise/userexerlist.do">ü���ü� ��������</a></li>
-					<li class="page-scroll"><a href="/userqna/userqnalist.do">�Ű��Խ���</a>
-					</li>
+						href="/usernotice/usernoticelist.do">공지사항</a></li>
+					<li class="page-scroll"><a href="/userevent/usereventlist.do">체육시설
+							조회 및 예약</a></li>
+					<li class="page-scroll"><a href="/userqna/userqnalist.do">신고게시판</a></li>
 					<li class="page-scroll"><a href="/member/logout.do"><font
 							size="1">logout</font></a></li>
 				</ul>
 			</div>
 		</div>
 	</nav>
+
+
+	<%
+		}
+	%>
+
 	<!-- Header -->
 	<header>
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
-					<div class="intro-text"></div>
+					<div class="intro-text">
+						<hr class="star-light">
+						<span class="name">S P O R n S E R</span>
+						<hr class="star-light">
+						<span class="skills">시설 사용시간 : 08:00 ~ 22:00 </span> <br> <span
+							class="skills">예약/예약취소 가능시간 : 당일예약/취소 </span>
+					</div>
 				</div>
 			</div>
 		</div>
 	</header>
-
-	<!----------------------------------------------------------eventlist start----------------------------------------------------->
+	<!--------------------------------------------------------------------------Header end------------------------------------------------------------------------------------------>
 
 	<section id="event">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12 text-center">
-					<h2>ü���ü� ��ȸ</h2>
+					<h2>체육시설 조회</h2>
 					<hr class="star-primary">
 				</div>
 			</div>
-			<div class="tab-content" id="nav-tabContent">
-				<div class="btn-group mr-1 mb-1">
-					<button type="button"
-						class="btn btn-success btn-min-width dropdown-toggle"
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">������
-						����</button>
-					<div class="dropdown-menu">
-						<a class="dropdown-item" href="#">Action</a> <a
-							class="dropdown-item" href="#">Another action</a> <a
-							class="dropdown-item" href="#">Something else here</a>
-						<div class="dropdown-divider"></div>
-						<a class="dropdown-item" href="#">Separated link</a>
-					</div>
-				</div>
-				<!-- /btn-group -->
-				<div class="btn-group mr-1 mb-1">
-					<button type="button"
-						class="btn btn-success btn-min-width dropdown-toggle"
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">����
-						����</button>
-					<div class="dropdown-menu">
-						<a class="dropdown-item" href="#">Action</a> <a
-							class="dropdown-item" href="#">Another action</a> <a
-							class="dropdown-item" href="#">Something else here</a>
-						<div class="dropdown-divider"></div>
-						<a class="dropdown-item" href="#">Separated link</a>
-					</div>
-				</div>
+			<div>
+				<span id="sel1box" class="select_box"
+					style="display: inline-block; width: 7em;"><select id="sel1"
+					name="searchSelect" class="custom-select form-control search_form">
+						<option>전체</option>
+						<option>강남구</option>
+						<option>강동구</option>
+						<option>강북구</option>
+						<option>강서구</option>
+						<option>관악구</option>
+						<option>광진구</option>
+						<option>구로구</option>
+						<option>금천구</option>
+						<option>노원구</option>
+						<option>도봉구</option>
+						<option>동대문구</option>
+						<option>동작구</option>
+						<option>마포구</option>
+						<option>서대문구</option>
+						<option>서초구</option>
+						<option>성동구</option>
+						<option>성북구</option>
+						<option>송파구</option>
+						<option>양천구</option>
+						<option>영등포구</option>
+						<option>용산구</option>
+						<option>은평구</option>
+						<option>종로구</option>
+						<option>중구</option>
+						<option>중랑구</option>
+				</select> </span> <span id="sel2box" class="select_box"
+					style="display: inline-block; width: 7em;"> <select
+					id="sel2" name="searchSelect"
+					class="custom-select form-control search_form">
+						<option>전체</option>
+						<option>X-게임장</option>
+						<option>간이운동장</option>
+						<option>게이트볼장</option>
+						<option>골프연습장</option>
+						<option>구기체육관</option>
+						<option>국궁장</option>
+						<option>농구장</option>
+						<option>다목적운동장</option>
+						<option>레이싱경기장</option>
+						<option>론볼장</option>
+						<option>배구장</option>
+						<option>배드민턴장</option>
+						<option>빙상장</option>
+						<option>사격장</option>
+						<option>산악자전거체험장</option>
+						<option>생활체육관</option>
+						<option>수영장</option>
+						<option>스크린사격장</option>
+						<option>야구장</option>
+						<option>양궁장</option>
+						<option>육상경기장</option>
+						<option>인라인스케이트장</option>
+						<option>족구장</option>
+						<option>축구장</option>
+						<option>클라이밍장</option>
+						<option>탁구장</option>
+						<option>테니스장</option>
+						<option>풋살장</option>
+						<option>학교체육시설</option>
+				</select>
+				</span> <span class="search_box" style="display: inline-block;">
+					<button onclick="test()" class="btn search_btn" type="button"
+						style="height: 2.5em; width: 7em;">
+						<span class="ion-ios-search icon-color">조회</span>
+					</button>
+				</span>
 			</div>
 			<br>
 			<div class="row" style="text-align: center;">
 				<div class="div_content_container"
 					style="color: #666666; font-weight: bold;">
 					<div style="display: table-row;">
-						<div class="table_1st div_content_box">��ȣ</div>
-						<div class="table_2st div_content_box">������</div>
-						<div class="table_2nd div_content_box">����</div>
-						<div class="table_3rd div_content_box">�ü���ġ</div>
-						<div class="table_4th div_content_box">�ü���</div>
+						<div class="table_1st div_content_box">번호</div>
+						<div class="table_2st div_content_box">지역구</div>
+						<div class="table_2nd div_content_box">종목</div>
+						<div class="table_3rd div_content_box">시설위치</div>
+						<div class="table_4th div_content_box">시설명</div>
 					</div>
 				</div>
 				<hr>
@@ -266,8 +363,7 @@
 						<div class="table_2nd div_content_box"><%=elist.get(i).getLoc_gu()%></div>
 						<div class="table_2nd div_content_box">
 							<a
-								href="/�������������� �Ѿ���ؾ�¡.do?nseq=<%=elist.get(i).getFac_seq()%>"><%=elist.get(i).getSpo_kind().replaceAll("& #40;", "(").replaceAll("& #41;", ")")
-						.replaceAll("& gt;", ">").replaceAll("& lt;", "<")%></a>
+								href="/userreservation/userreservationlist.do?fseq=<%=elist.get(i).getFac_seq()%>"><%=elist.get(i).getSpo_kind()%></a>
 						</div>
 						<div class="table_3rd div_content_box"><%=elist.get(i).getFac_loc()%></div>
 						<div class="table_4th div_content_box"><%=elist.get(i).getFac_name()%></div>
@@ -277,7 +373,7 @@
 					%>
 				</div>
 
-				<!-- ����¡ ���� -->
+				<!-- 페이징 시작 -->
 				<div class="pagingBox"
 					style="margin-top: 15px; margin-bottom: 15px;">
 					<ul style="list-style: none;">
@@ -286,7 +382,7 @@
 							int FstartPage = ((FPgNum - 1) / 5) * 5 + 1;
 							int Ftemp = ((FtotalPage - 1) / 5) * 5 + 1;
 						%>
-						<!-- < ���� ��� -->
+						<!-- < 이전 찍기 -->
 						<%
 							if (FPgNum == 1) {
 						%>
@@ -299,15 +395,26 @@
 						<%
 							}
 						%>
-						<!-- ���� ��� -->
+						<!-- 숫자 찍기 -->
 						<%
 							if (FstartPage == Ftemp) {
 						%>
 						<%
 							for (int i = FstartPage; i <= FtotalPage; i++) {
 						%>
+						<%
+							if (i == FPgNum) {
+						%>
+						<li><span style="background-color: #18BC9C"><%=i%></span></li>
+						<%
+							} else {
+						%>
 						<li><span><a
 								href="/userevent/usereventlist.do?FPgNum=<%=i%>"><%=i%></a></span></li>
+						<%
+							}
+						%>
+
 						<%
 							}
 						%>
@@ -317,6 +424,12 @@
 						<%
 							for (int i = FstartPage; i <= FstartPage + 4; i++) {
 						%>
+						<%	if (i == FPgNum) {
+						%>
+						<li><span style="background-color: #18BC9C"><%=i%></span></li>
+						<%
+							} else {
+						%>
 						<li><span><a
 								href="/userevent/usereventlist.do?FPgNum=<%=i%>"><%=i%></a></span></li>
 						<%
@@ -325,7 +438,10 @@
 						<%
 							}
 						%>
-						<!-- > ���� ��� -->
+						<%
+							}
+						%>
+						<!-- > 다음 찍기 -->
 						<%
 							if (FPgNum == FtotalPage) {
 						%>
@@ -355,7 +471,7 @@
 				<div class="container">
 					<div class="row">
 						<div class="footer-col col-md-50">
-							<h1>�ģ���� ��¥ģ����.</h1>
+							<h1>운동친구가 진짜친구다.</h1>
 							<h7></h7>
 							<h7></h7>
 							<h7></h7>
@@ -367,7 +483,7 @@
 		<div class="footer-below">
 			<div class="container">
 				<div class="row">
-					<div class="col-lg-12">����� ����ü���ü� ���̵� &copy; SPORnSER</div>
+					<div class="col-lg-12">서울시 공공체육시설 가이드 &copy; SPORnSER</div>
 				</div>
 			</div>
 		</div>

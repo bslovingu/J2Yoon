@@ -168,6 +168,10 @@
 <body id="page-top" class="index">
 
 	<!-- Navigation -->
+	<%
+		if (user_email.equals("sincethe1997@naver.com")) {
+	%>
+	<!-- Navigation -->
 	<nav id="mainNav"
 		class="navbar navbar-default navbar-fixed-top navbar-custom">
 		<div class="container">
@@ -185,9 +189,9 @@
 				id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="#"><%=user_name%> 관리자님 환영합니다.</a></li>
-					<li class="page-scroll"><a href="#notice">공지사항</a></li>
-					<li class="page-scroll"><a href="#event">체육시설 조회</a></li>
-					<li class="page-scroll"><a href="/exercise/adminexercise.do">체육시설
+					<li class="page-scroll"><a href="/admin/NoticeList.do">공지사항</a></li>
+					<li class="page-scroll"><a href="/userevent/usereventlist.do">체육시설 조회</a></li>
+					<li class="page-scroll"><a href="/userreservation/userreservationlist.do">체육시설
 							예약정보</a></li>
 					<li class="page-scroll"><a href="/userqna/userqnalist.do">신고게시판</a>
 					</li>
@@ -198,12 +202,57 @@
 		</div>
 	</nav>
 
-	<!--------------------------------------------------------------------------Header start---------------------------------------------------------------------------------------->
+	<%
+		} else {
+	%>
+	<nav id="mainNav"
+		class="navbar navbar-default navbar-fixed-top navbar-custom">
+		<div class="container">
+			<div class="navbar-header page-scroll">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span> Menu <i
+						class="fa fa-bars"></i>
+				</button>
+				<a class="navbar-brand" href="/user/usermain.do"><font size="7">SPORnSER</font></a>
+			</div>
+
+			<div class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-right">
+					<li class="page-scroll"><a href="/user/usermain.do"><%=user_name + "님 환영합니다."%></a>
+					</li>
+					<li class="page-scroll"><a
+						href="/usernotice/usernoticelist.do">공지사항</a></li>
+					<li class="page-scroll"><a href="/userevent/usereventlist.do">체육시설
+							조회</a></li>
+					<li class="page-scroll"><a
+						href="/userreservation/userreservationlist.do">체육시설 예약정보</a></li>
+					<li class="page-scroll"><a href="/userqna/userqnalist.do">신고게시판</a></li>
+					<li class="page-scroll"><a href="/member/logout.do"><font
+							size="1">logout</font></a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+
+	<%
+		}
+	%>
+
+	<!-- Header -->
 	<header>
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
-					<div class="intro-text"></div>
+					<div class="intro-text">
+						<hr class="star-light">
+						<span class="name">S P O R n S E R</span>
+						<hr class="star-light">
+						<span class="skills">시설 사용시간 : 08:00 ~ 22:00 </span> <br> <span
+							class="skills">예약/예약취소 가능시간 : 당일예약/취소 </span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -234,8 +283,7 @@
 								class="form-group col-xs-12 floating-label-form-group controls">
 								<label>Title</label> <input type="text" class="form-control"
 									placeholder="title" name="title"
-									value="<%=updateform.getNotice_title().replaceAll("& #40;", "(").replaceAll("& #41;", ")")
-						.replaceAll("& gt;", ">").replaceAll("& lt;", "<")%>"
+									value="<%=updateform.getNotice_title()%>"
 									required
 									data-validation-required-message="Please enter your name.">
 								<p class="help-block text-danger"></p>
@@ -247,8 +295,7 @@
 								<label>Message</label>
 								<textarea rows="5" class="form-control" placeholder="Message"
 									name="content" required
-									data-validation-required-message="Please enter a message."><%=updateform.getNotice_content().replaceAll("& #40;", "(").replaceAll("& #41;", ")")
-						.replaceAll("& gt;", ">").replaceAll("& lt;", "<")%></textarea>
+									data-validation-required-message="Please enter a message."><%=updateform.getNotice_content()%></textarea>
 								<p class="help-block text-danger"></p>
 							</div>
 						</div>
@@ -293,8 +340,7 @@
 								class="form-group col-xs-12 floating-label-form-group controls">
 								<label>Title</label>
 								<p class="help-block text-danger">제목</p>
-								<%=ndetail.getNotice_title().replaceAll("& #40;", "(").replaceAll("& #41;", ")")
-						.replaceAll("& gt;", ">").replaceAll("& lt;", "<")%>
+								<%=ndetail.getNotice_title()%>
 							</div>
 						</div>
 						<div class="row control-group">
@@ -302,8 +348,7 @@
 								class="form-group col-xs-12 floating-label-form-group controls">
 								<label>Message</label>
 								<p class="help-block text-danger">내용</p>
-								<%=ndetail.getNotice_content().replaceAll("& #40;", "(").replaceAll("& #41;", ")")
-						.replaceAll("& gt;", ">").replaceAll("& lt;", "<")%>
+								<%=ndetail.getNotice_content()%>
 							</div>
 						</div>
 						<br>
@@ -356,8 +401,7 @@
 						<div class="table_1st div_content_box"><%=nlist.get(i).getNotice_seq()%></div>
 						<div class="table_2nd div_content_box">
 							<a
-								href="/notice/noticedetail.do?nseq=<%=nlist.get(i).getNotice_seq()%>"><%=nlist.get(i).getNotice_title().replaceAll("& #40;", "(").replaceAll("& #41;", ")")
-							.replaceAll("& gt;", ">").replaceAll("& lt;", "<")%></a>
+								href="/notice/noticedetail.do?nseq=<%=nlist.get(i).getNotice_seq()%>"><%=nlist.get(i).getNotice_title()%></a>
 						</div>
 						<div class="table_3rd div_content_box"><%=nlist.get(i).getNotice_cnt()%></div>
 						<div class="table_4th div_content_box"><%=nlist.get(i).getNotice_uploadname()%></div>
@@ -670,8 +714,7 @@
 								class="form-group col-xs-12 floating-label-form-group controls">
 								<label>Message</label>
 								<p class="help-block text-danger">내용</p>
-								<%=edetail.getEvent_content().replaceAll("& #40;", "(").replaceAll("& #41;", ")")
-						.replaceAll("& gt;", ">").replaceAll("& lt;", "<")%>
+								<%=edetail.getEvent_content()%>
 							</div>
 						</div>
 						<br>
@@ -716,8 +759,7 @@
 								<label>Title</label>
 								<p class="help-block text-danger">제목</p>
 								<input type="text"
-									value="<%=upeventform.getEvent_title().replaceAll("& #40;", "(").replaceAll("& #41;", ")")
-						.replaceAll("& gt;", ">").replaceAll("& lt;", "<")%>"
+									value="<%=upeventform.getEvent_title()%>"
 									class="form-control" placeholder="title" name="title" required
 									data-validation-required-message="Please enter your name.">
 							</div>
@@ -729,8 +771,7 @@
 								<p class="help-block text-danger">내용</p>
 								<textarea rows="5" class="form-control" placeholder="Message"
 									name="content" required
-									data-validation-required-message="Please enter a message."><%=upeventform.getEvent_content().replaceAll("& #40;", "(").replaceAll("& #41;", ")")
-						.replaceAll("& gt;", ">").replaceAll("& lt;", "<")%></textarea>
+									data-validation-required-message="Please enter a message."><%=upeventform.getEvent_content()%></textarea>
 							</div>
 						</div>
 						<br>
@@ -786,8 +827,7 @@
 						<div class="table_1st div_content_box"><%=qlist.get(i).getQna_seq()%></div>
 						<div class="table_2nd div_content_box">
 							<a
-								href="/userqna/userqnadetail.do?qseq=<%=qlist.get(i).getQna_seq()%>"><%=qlist.get(i).getQna_title().replaceAll("& #40;", "(").replaceAll("& #41;", ")")
-							.replaceAll("& gt;", ">").replaceAll("& lt;", "<")%></a>
+								href="/userqna/userqnadetail.do?qseq=<%=qlist.get(i).getQna_seq()%>"><%=qlist.get(i).getQna_title()%></a>
 						</div>
 						<div class="table_3rd div_content_box"><%=qlist.get(i).getQna_cnt()%></div>
 						<div class="table_4th div_content_box"><%=qlist.get(i).getQna_uploadname()%></div>
@@ -942,8 +982,7 @@
 								class="form-group col-xs-12 floating-label-form-group controls">
 								<label>Title</label>
 								<p class="help-block text-danger">제목</p>
-								<%=qnadetail.getQna_title().replaceAll("& #40;", "(").replaceAll("& #41;", ")")
-						.replaceAll("& gt;", ">").replaceAll("& lt;", "<")%>
+								<%=qnadetail.getQna_title()%>
 							</div>
 						</div>
 						<div class="row control-group">
@@ -951,8 +990,7 @@
 								class="form-group col-xs-12 floating-label-form-group controls">
 								<label>Message</label>
 								<p class="help-block text-danger">내용</p>
-								<%=qnadetail.getQna_content().replaceAll("& #40;", "(").replaceAll("& #41;", ")")
-						.replaceAll("& gt;", ">").replaceAll("& lt;", "<")%>
+								<%=qnadetail.getQna_content()%>
 							</div>
 						</div>
 						<br>
@@ -1031,8 +1069,7 @@
 									%>
 									<div style="display: flex; justify-content: space-between;">
 										<div class="Comm_uploadname"><%=qnadetail.getClist().get(i).getComm_uploadname()%></div>
-										<div class="Comm_content"><%=qnadetail.getClist().get(i).getComm_content().replaceAll("& #40;", "(")
-							.replaceAll("& #41;", ")").replaceAll("& gt;", ">").replaceAll("& lt;", "<")%></div>
+										<div class="Comm_content"><%=qnadetail.getClist().get(i).getComm_content()%></div>
 									</div>
 									<%
 										}

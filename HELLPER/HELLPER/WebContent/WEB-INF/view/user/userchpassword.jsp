@@ -1,5 +1,4 @@
 <%@page import="java.text.DecimalFormat"%>
-<%@page import="poly.dto.BmiDTO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="poly.util.CmmUtil"%>
 <%@page import="poly.dto.MemberDTO"%>
@@ -37,52 +36,96 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
+
 <body id="page-top" class="index">
 
     <!-- Navigation -->
-    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top navbar-custom">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header page-scroll">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
-                </button>
-                <a class="navbar-brand" href="#page-top"><font size="7">SPORnSER</font></a>
-            </div>
+    <%
+		if (user_email.equals("sincethe1997@naver.com")) {
+	%>
+	<!-- Navigation -->
+	<nav id="mainNav"
+		class="navbar navbar-default navbar-fixed-top navbar-custom">
+		<div class="container">
+			<div class="navbar-header page-scroll">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span> Menu <i
+						class="fa fa-bars"></i>
+				</button>
+				<a class="navbar-brand" href="/admin/adminmain.do"><font
+					size="7">SPORnSER</font></a>
+			</div>
 
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="#"><%=user_name %>님 환영합니다.</a>
-                    </li>
-                     <li class="page-scroll">
-                       <a href="/usermember/getusermemberdetail.do?mem_seq=<%=user_seq%>">마이페이지</a>
-                    </li>
-                    <li class="page-scroll">
-                        <a href="/usernotice/usernoticelist.do">커뮤니티</a>
-                    </li>
-                    <li class="page-scroll">
-                    	<a href="/member/logout.do"><font size="2">logout</font></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+			<div class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#"><%=user_name%> 관리자님 환영합니다.</a></li>
+					<li class="page-scroll"><a href="/admin/NoticeList.do">공지사항</a></li>
+					<li class="page-scroll"><a href="/userevent/usereventlist.do">체육시설 조회 및 예약</a></li>
+					<li class="page-scroll"><a href="/userqna/userqnalist.do">신고게시판</a>
+					</li>
+					<li class="page-scroll"><a href="/member/logout.do"><font
+							size="1">logout</font></a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<%
+		} else {
+	%>
+	<nav id="mainNav"
+		class="navbar navbar-default navbar-fixed-top navbar-custom">
+		<div class="container">
+			<div class="navbar-header page-scroll">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span> Menu <i
+						class="fa fa-bars"></i>
+				</button>
+				<a class="navbar-brand" href="/user/usermain.do"><font size="7">SPORnSER</font></a>
+			</div>
+
+			<div class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-right">
+					<li class="page-scroll"><a href="/user/usermain.do"><%=user_name + "님 환영합니다."%></a>
+					</li>
+					<li class="page-scroll"><a
+						href="/usernotice/usernoticelist.do">공지사항</a></li>
+					<li class="page-scroll"><a href="/userevent/usereventlist.do">체육시설
+							조회 및 예약</a></li>
+					<li class="page-scroll"><a href="/userqna/userqnalist.do">신고게시판</a></li>
+					<li class="page-scroll"><a href="/member/logout.do"><font
+							size="1">logout</font></a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+
+	<%
+		}
+	%>
 
     <!-- Header -->
-    <header>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="intro-text">
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
-    </header>
-
-<!--------------------------------------------------------------------------user info list start------------------------------------------------------------------------------------------>
+	<header>
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="intro-text">
+						<hr class="star-light">
+						<span class="name">S P O R n S E R</span>
+						<hr class="star-light">
+						<span class="skills">시설 사용시간 : 08:00 ~ 22:00 </span> <br> <span
+							class="skills">예약/예약취소 가능시간 : 당일예약/취소 </span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!--------------------------------------------------------------------------Header end------------------------------------------------------------------------------------------>
 
     
 				

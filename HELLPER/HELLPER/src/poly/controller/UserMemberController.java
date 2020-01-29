@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import poly.dto.MemberDTO;
 import poly.dto.EventDTO;
 import poly.service.IMemberService;
+import poly.util.CmmUtil;
 // import poly.service.ISpofacService;
 import poly.util.EncryptUtil;
 
@@ -62,14 +63,16 @@ public class UserMemberController {
 		mdto.setMem_seq(mem_seq);
 		
 		mmap = memberService.getMemberDetail(mdto, (String) session.getAttribute("SS_MEM_SEQ"));
-		
-		mdto = (MemberDTO)mmap.get("mdto");
-		mdto.setEmail(new EncryptUtil().decAES128CBC(mdto.getEmail()));
-		mdto.setPhone(new EncryptUtil().decAES128CBC(mdto.getPhone()));
-		
+
 		if (mmap == null) {
 			mmap = new HashMap<>();
 		}
+		
+		mdto = (MemberDTO)mmap.get("mdto");
+		mdto.setEmail(EncryptUtil.decAES128CBC(mdto.getEmail()));
+		mdto.setPhone(EncryptUtil.decAES128CBC(mdto.getPhone()));
+		
+
 		
 		model.addAttribute("memberdetail", mdto);
 		
@@ -101,7 +104,6 @@ public class UserMemberController {
 		
 		log.info(this.getClass().getName() + "updateusermemberinfo start!");
 		
-						
 		String mem_seq = request.getParameter("mem_seq");
 		String phone = EncryptUtil.encAES128CBC(request.getParameter("phone"));
 		String password = EncryptUtil.encHashSHA256(request.getParameter("password"));

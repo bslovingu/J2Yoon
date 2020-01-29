@@ -17,7 +17,9 @@ import poly.dto.EventDTO;
 import poly.dto.NoticeDTO;
 import poly.dto.QnADTO;
 import poly.service.INoticeService;
+import poly.util.CmmUtil;
 import poly.util.EncryptUtil;
+import poly.util.FilterUtil;
 
 @Controller
 public class UserNoticeController {
@@ -47,6 +49,7 @@ public class UserNoticeController {
 		}else {
 			for(int i=0;i<nlist.size();i++) {
 				nlist.get(i).setNotice_uploadname(EncryptUtil.decAES128CBC(nlist.get(i).getNotice_uploadname()));
+				FilterUtil.NoticeFilter(nlist.get(i));
 			}
 		}
 		model.addAttribute("Ntotal",Ntotal);
@@ -67,12 +70,12 @@ public class UserNoticeController {
 		
 		log.info(this.getClass().getName() + "getusernoticedetail start!");
 		
-		String nseq = request.getParameter("nseq");
+		String nseq = CmmUtil.nvl(request.getParameter("nseq"));
 		NoticeDTO ndto = new NoticeDTO();
 		ndto.setNotice_seq(nseq);
 		
 		Map<String, Object> nmap = noticeService.getNoticeDetail(ndto);
-		
+		FilterUtil.NoticeFilter((NoticeDTO)nmap.get("ndetail"));
 		model.addAttribute("ndetail", (NoticeDTO)nmap.get("ndetail"));
 		log.info(this.getClass().getName() + "getusernoticedetail end!");
 		

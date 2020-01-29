@@ -1,6 +1,7 @@
 package poly.controller;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -18,7 +19,9 @@ import poly.dto.CommentDTO;
 import poly.dto.QnADTO;
 import poly.service.ICommentService;
 import poly.service.IQnAService;
+import poly.util.CmmUtil;
 import poly.util.EncryptUtil;
+import poly.util.FilterUtil;
 
 @Controller
 public class UserQnAController {
@@ -51,6 +54,7 @@ public class UserQnAController {
 		} else {
 			for (int i = 0; i < qlist.size(); i++) {
 				qlist.get(i).setQna_uploadname(EncryptUtil.decAES128CBC(qlist.get(i).getQna_uploadname()));
+				FilterUtil.QnAFilter(qlist.get(i));
 			}
 		}
 		model.addAttribute("qlist", qlist);
@@ -64,25 +68,46 @@ public class UserQnAController {
 	public String userQnADetail(HttpServletRequest request, HttpServletResponse response, Model model)
 			throws Exception {
 		log.info(this.getClass().getName() + ".userQnADetail start!");
-		String qseq = request.getParameter("qseq");
+		//qseq가 널값이던 있던 없던 받음
+		String qseq = CmmUtil.nvl(request.getParameter("qseq"));
+		
 		log.info("qseq : " + qseq);
 
 		QnADTO qdto = new QnADTO();
 		// 댓글 페이지 받음
 		int CPgNum = 0;
-		if (request.getParameter("CPgNum") == null) {
+		if (request.getParameter("CPgNum") == null||request.getParameter("CPgNum").equals("")) {
 			CPgNum = 1;
 		} else {
 			CPgNum = Integer.parseInt(request.getParameter("CPgNum"));
 		}
 		// 전체 댓글 갯수 조회
-		int Ctotal = commentService.getCommentTotal(qseq);
 		
 		qdto.setQna_seq(qseq);
 		qdto.setStartNum((CPgNum - 1) * 10 + 1);
 		qdto.setEndNum(CPgNum * 10);
 		qdto = qnaService.getUserQnADetail(qdto);
-
+		if(qdto==null) {
+			model.addAttribute("msg","없는 게시글 입니다.");
+			model.addAttribute("url","/userqna/userqnalist.do");
+			return "/redirect";
+		}
+		int Ctotal = commentService.getCommentTotal(qseq);
+		qdto = FilterUtil.QnAFilter(qdto);
+		
+		List<CommentDTO> clist = qdto.getClist();
+		Iterator<CommentDTO> it = clist.iterator();
+		
+		clist = null;
+		clist = new ArrayList<CommentDTO>();
+		
+		FilterUtil fu = new FilterUtil();
+		while(it.hasNext()) {
+			clist.add(fu.CommentFilter(it.next()));
+		}
+			
+		qdto.setClist(clist);
+		
 		model.addAttribute("qdto", qdto);
 		model.addAttribute("CPgNum",CPgNum);
 		model.addAttribute("Ctotal",Ctotal);
@@ -104,9 +129,9 @@ public class UserQnAController {
 	public String userQnAReg(HttpServletRequest request, HttpServletResponse response, Model model, HttpSession session)
 			throws Exception {
 		log.info(this.getClass().getName() + ".userQnAReg start!");
-		String title = request.getParameter("title");
+		String title = CmmUtil.nvl(request.getParameter("title"));
 		log.info("title : " + title);
-		String content = request.getParameter("content");
+		String content = CmmUtil.nvl(request.getParameter("content"));
 		log.info("content : " + content);
 		content = content.replaceAll("\r\n", "<br>");
 		String user_email = (String) session.getAttribute("SS_USER_EMAIL");
@@ -134,7 +159,7 @@ public class UserQnAController {
 	public String deleteUserQnA(HttpServletRequest request, HttpServletResponse response, Model model,
 			HttpSession session) throws Exception {
 		log.info(this.getClass().getName() + ".deleteUserQnA start!");
-		String qseq = request.getParameter("qseq");
+		String qseq = CmmUtil.nvl(request.getParameter("qseq"));
 		log.info("qseq : " + qseq);
 		QnADTO qdto = new QnADTO();
 		qdto.setQna_seq(qseq);
@@ -156,14 +181,14 @@ public class UserQnAController {
 	public String updateUserQnAForm(HttpServletRequest request, HttpServletResponse response, Model model,
 			HttpSession session) throws Exception {
 		log.info(this.getClass().getName() + ".updateUserQnAForm start!");
-		String qseq = request.getParameter("qseq");
+		String qseq = CmmUtil.nvl(request.getParameter("qseq"));
 		log.info("qseq : " + qseq);
 
 		QnADTO qdto = new QnADTO();
 		qdto.setQna_seq(qseq);
-
 		qdto = qnaService.getUserQnADetail(qdto);
-		qdto.setQna_content(qdto.getQna_content().replaceAll("<br>", "\r\n"));
+		qdto = FilterUtil.QnAFilter(qdto);
+		
 		model.addAttribute("qdto", qdto);
 		log.info(this.getClass().getName() + ".updateUserQnAForm end!");
 		return "/user/qnaupdateform";
@@ -173,13 +198,13 @@ public class UserQnAController {
 	public String updateUserQnA(HttpServletRequest request, HttpServletResponse response, Model model)
 			throws Exception {
 		log.info(this.getClass().getName() + ".updateUserQnA end!");
-		String qseq = request.getParameter("qseq");
+		String qseq = CmmUtil.nvl(request.getParameter("qseq"));
 		log.info("qseq : " + qseq);
-		String title = request.getParameter("title");
+		String title = CmmUtil.nvl(request.getParameter("title"));
 		log.info("title : " + title);
-		String content = request.getParameter("content");
+		String content = CmmUtil.nvl(request.getParameter("content"));
 		log.info("content : " + content);
-		content = content.replaceAll("\r\n", "<br>");
+		
 		QnADTO qdto = new QnADTO();
 		qdto.setQna_seq(qseq);
 		qdto.setQna_title(title);

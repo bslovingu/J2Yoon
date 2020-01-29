@@ -12,7 +12,7 @@
 		SELECT COUNT(*)
 		FROM SPOFAC
 	</select>
-	
+
 	<!-- qna 리스트 쿼리 -->
 	<select id="getFacilityList" parameterType="SPOFACDTO"
 		resultType="SPOFACDTO">
@@ -37,5 +37,64 @@
 		)
 		WHERE RNUM>=#{startNum}
 		]]>
+	</select>
+
+	<!-- 시설 갯수조회 쿼리 -->
+	<select id="getFacCount" parameterType="SPOFACDTO" resultType="int">
+		SELECT COUNT(*)
+		FROM SPOFAC
+		WHERE 1=1
+		<if test='gu != "전체"'>
+			AND LOC_GU=#{gu}
+		</if>
+		<if test='type != "전체"'>
+			AND SPO_KIND=#{type}
+		</if>
+	</select>
+
+	<!-- qna 리스트 쿼리 -->
+	<select id="getFacilitySearchList" parameterType="SPOFACDTO"
+		resultType="SPOFACDTO">
+		SELECT
+		FAC_SEQ,
+		LOC_GU,
+		SPO_KIND,
+		FAC_NAME,
+		FAC_LOC,
+		LOC_W,
+		LOC_K
+		FROM
+		(
+		SELECT A.* , ROWNUM as RNUM
+		FROM
+		(
+		SELECT *
+		FROM SPOFAC
+		WHERE 1=1
+		<if test='gu != "전체"'>
+			AND LOC_GU=#{gu}
+		</if>
+		<if test='type != "전체"'>
+			AND SPO_KIND=#{type}
+		</if>
+		ORDER BY LENGTH(FAC_SEQ) ASC, FAC_SEQ ASC
+		)A
+				<![CDATA[
+				WHERE ROWNUM <= #{endNum}
+				]]>
+		)
+		<![CDATA[
+		WHERE RNUM>=#{startNum}
+		]]>
+	</select>
+	<!-- qna 리스트 쿼리 -->
+	<select id="getSpofacInfo" parameterType="String"
+		resultType="SPOFACDTO">
+		SELECT
+		SPO_KIND,
+		FAC_NAME,
+		FAC_LOC
+		FROM SPOFAC WHERE FAC_SEQ=#{fseq}
+		
 	</select>
 </mapper>

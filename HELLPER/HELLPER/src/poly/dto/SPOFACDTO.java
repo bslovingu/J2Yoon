@@ -8,6 +8,11 @@ public class SPOFACDTO {
 	String fac_loc;
 	String loc_w;
 	String loc_k;
+	String gu;
+	String type;
+	int startNum;
+	int endNum;
+	
 	public String getFac_seq() {
 		return fac_seq;
 	}
@@ -49,6 +54,30 @@ public class SPOFACDTO {
 	}
 	public void setLoc_k(String loc_k) {
 		this.loc_k = loc_k;
+	}
+	public String getGu() {
+		return gu;
+	}
+	public void setGu(String gu) {
+		this.gu = gu;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public int getStartNum() {
+		return startNum;
+	}
+	public void setStartNum(int startNum) {
+		this.startNum = startNum;
+	}
+	public int getEndNum() {
+		return endNum;
+	}
+	public void setEndNum(int endNum) {
+		this.endNum = endNum;
 	}
 	
 	

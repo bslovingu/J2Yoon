@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import poly.dto.NoticeDTO;
-import poly.dto.QnADTO;
 
 public interface INoticeService {
 	public List<NoticeDTO> getAllNotice() throws Exception;

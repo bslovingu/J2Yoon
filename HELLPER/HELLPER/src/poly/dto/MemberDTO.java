@@ -7,6 +7,8 @@ public class MemberDTO {
 	String password;
 	String phone;
 	String temp_password;
+	String status;
+	
 	int MstartNum;
 	int MendNum;
 	
@@ -20,6 +22,13 @@ public class MemberDTO {
 
 	}
 	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	
 	public int getMstartNum() {
 		return MstartNum;

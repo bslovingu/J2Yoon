@@ -1,41 +1,15 @@
-<%@page import="poly.dto.BmiDTO"%>
 <%@page import="poly.util.CmmUtil"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="poly.dto.MemberDTO"%>
 <%@page import="java.util.List"%>
+<%@page import="poly.util.EncryptUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
-	String user_email = (String) session.getAttribute("SS_USER_EMAIL");
+	String user_email = EncryptUtil.decAES128CBC((String) session.getAttribute("SS_USER_EMAIL"));
 	String user_name = (String) session.getAttribute("SS_USER_NAME");
 	String user_seq = (String) session.getAttribute("SS_MEM_SEQ");
-
-	DecimalFormat f = new DecimalFormat(".##");
-	String bmi = (String) request.getAttribute("bmi");
-	String bmiresult = CmmUtil.nvl((String) request.getAttribute("bmiresult"));
-	List<BmiDTO> blist  = (List<BmiDTO>) request.getAttribute("blist");
-
-	String[] barr = null;
-	if (blist != null) {
-		barr = new String[blist.size()];
-		if (blist.size() < 10) {
-			int index = blist.size();
-
-			for (int i = 0; i < blist.size(); i++) {
-				index--;
-				barr[i] = blist.get(index).getBmi_result();
-			}
-
-		} else {
-			int index = 9;
-			for (int i = 0; i < blist.size(); i++) {
-				barr[i] = blist.get(index).getBmi_result();
-				index--;
-			}
-		}
-
-	}
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -66,14 +40,18 @@
 <script
 	src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 <style>
-.chart-area{
-	height:350px;
+.chart-area {
+	height: 350px;
 }
 </style>
 </head>
 
 <body id="page-top" class="index">
 
+	<!-- Navigation -->
+	<%
+		if (user_email.equals("sincethe1997@naver.com")) {
+	%>
 	<!-- Navigation -->
 	<nav id="mainNav"
 		class="navbar navbar-default navbar-fixed-top navbar-custom">
@@ -84,27 +62,63 @@
 					<span class="sr-only">Toggle navigation</span> Menu <i
 						class="fa fa-bars"></i>
 				</button>
-				<a class="navbar-brand" href="#page-top"><font size="7">SPORnSER</font></a>
+				<a class="navbar-brand" href="/admin/adminmain.do"><font
+					size="7">SPORnSER</font></a>
 			</div>
 
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav navbar-right">
-					<li class="page-scroll"><a href="#"><%=user_name + "님 환영합니다."%></a>
-					</li>
-					<li class="page-scroll"><a href="#healthvideo">체육시설 추천</a></li>
-					<li class="page-scroll"><a href="#bmi">이용 현황</a></li>
+					<li><a href="#"><%=user_name%> 관리자님 환영합니다.</a></li>
+					<li class="page-scroll"><a href="/admin/NoticeList.do">공지사항</a></li>
+					<li class="page-scroll"><a href="/userevent/usereventlist.do">체육시설
+							조회</a></li>
 					<li class="page-scroll"><a
-						href="/usermember/getusermemberdetail.do?mem_seq=<%=user_seq%>">마이페이지</a>
+						href="/userreservation/userreservationlist.do">체육시설 예약정보</a></li>
+					<li class="page-scroll"><a href="/userqna/userqnalist.do">신고게시판</a>
 					</li>
-					<li class="page-scroll"><a
-						href="/usernotice/usernoticelist.do">커뮤니티</a></li>
 					<li class="page-scroll"><a href="/member/logout.do"><font
 							size="1">logout</font></a></li>
 				</ul>
 			</div>
 		</div>
 	</nav>
+
+	<%
+		} else {
+	%>
+	<nav id="mainNav"
+		class="navbar navbar-default navbar-fixed-top navbar-custom">
+		<div class="container">
+			<div class="navbar-header page-scroll">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span> Menu <i
+						class="fa fa-bars"></i>
+				</button>
+				<a class="navbar-brand" href="/user/usermain.do"><font size="7">SPORnSER</font></a>
+			</div>
+
+			<div class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-right">
+					<li class="page-scroll"><a href="/user/usermain.do"><%=user_name + "님 환영합니다."%></a>
+					</li>
+					<li class="page-scroll"><a href="#healthvideo">체육시설 추천</a></li>
+					<li class="page-scroll"><a href="#bmi">이용 현황</a></li>
+					<li class="page-scroll"><a href="/usermember/getusermemberdetail.do?mem_seq=<%=user_seq%>">UserInfo</a></li>
+					<li class="page-scroll"><a href="/usernotice/usernoticelist.do">커뮤니티</a></li>
+					<li class="page-scroll"><a href="/member/logout.do"><font
+							size="1">logout</font></a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+
+	<%
+		}
+	%>
 
 	<!-- Header -->
 	<!--------------------------------------------------------------------------Header start---------------------------------------------------------------------------------------->
@@ -116,8 +130,8 @@
 						<hr class="star-light">
 						<span class="name">S P O R n S E R</span>
 						<hr class="star-light">
-						<span class="skills">서울시 공공체육시설 예약시스템 SPORnSER입니다. 좋은 사람들과
-							공통된 취미를 즐기시길 바랍니다. </span>
+						<span class="skills">시설 사용시간 : 08:00 ~ 22:00 </span> <br> <span
+							class="skills">예약/예약취소 가능시간 : 당일예약/취소 </span>
 					</div>
 				</div>
 			</div>
@@ -150,7 +164,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12 text-center">
-					<h2>이용 현황</h2>
+					<h2>이용 현황 (DB연동 못했습니다, 구현X)</h2>
 					<hr class="star-primary">
 				</div>
 			</div>
@@ -162,7 +176,7 @@
 						<!-- Card Header - Dropdown -->
 						<div
 							class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-							<h6 class="m-0 font-weight-bold text-primary">지역구별 이용자 현황</h6>
+							<h6 class="m-0 font-weight-bold text-primary">지역구별 이용 현황</h6>
 						</div>
 						<!-- Card Body -->
 						<div class="card-body">
@@ -178,7 +192,7 @@
 						<!-- Card Header - Dropdown -->
 						<div
 							class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-							<h6 class="m-0 font-weight-bold text-primary">요일별 이용자 현황</h6>
+							<h6 class="m-0 font-weight-bold text-primary">종목별 이용자 현황</h6>
 						</div>
 						<!-- Card Body -->
 						<div class="card-body">
@@ -483,6 +497,8 @@
 		displayMarker(locPosition, message);
 	}
 </script>
+
+<!-- 차트차트차트차트 -->
 <script>
       var num0 = 10;
       var num1 = 1;
@@ -527,7 +543,7 @@
       var num0 = 10;
       var num1 = 1;
       var num2 = 5;
-      var num3 = 3;
+      var num3 = 3;            
       var num4 = 20;
       var num5 = 15;
       var num6 = 0;

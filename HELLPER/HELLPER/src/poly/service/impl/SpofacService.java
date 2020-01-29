@@ -33,4 +33,24 @@ public class SpofacService implements ISpofacService {
 		// TODO Auto-generated method stub
 		return spofacMapper.getFacilityList(startNum,endNum);
 	}
+
+	@Override
+	public int getFacCount(SPOFACDTO pDTO) throws Exception {
+		// TODO Auto-generated method stub
+		return spofacMapper.getFacCount(pDTO);
+	}
+
+	@Override
+	public List<SPOFACDTO> getFacilitySearchList(SPOFACDTO pDTO) throws Exception {
+		// TODO Auto-generated method stub
+		return spofacMapper.getFacilitySearchList(pDTO);
+	}
+
+	@Override
+	public SPOFACDTO getSpofacInfo(String fseq) throws Exception {
+		// TODO Auto-generated method stub
+		return spofacMapper.getSpofacInfo(fseq);
+	}
+	
+	
 }

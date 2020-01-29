@@ -4,7 +4,6 @@ import java.util.List;
 
 import config.Mapper;
 import poly.dto.NoticeDTO;
-import poly.dto.QnADTO;
 
 @Mapper("NoticeMapper")
 public interface NoticeMapper {

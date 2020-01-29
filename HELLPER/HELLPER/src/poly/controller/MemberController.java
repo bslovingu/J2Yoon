@@ -113,6 +113,13 @@ public class MemberController {
 
 		if (mdto != null) {
 			
+			if(mdto.getStatus().equals("1")) {
+				model.addAttribute("msg", "정지된 회원입니다.");
+				model.addAttribute("url", "/index.do");
+				
+				return "/redirect";
+			}
+				
 			String adminEmail = "sincethe1997@naver.com";
 			
 			if (mdto.getEmail().equals(EncryptUtil.encAES128CBC(adminEmail))) {
@@ -375,27 +382,15 @@ public class MemberController {
 			Model model) throws Exception {
 
 		log.info(this.getClass().getName() + " deletemember start!");
-		int MPgNum = 0;
-		if(request.getParameter("MPgNum")==null) {
-			MPgNum= 1;
-		}else {
-			MPgNum = Integer.parseInt(request.getParameter("MPgNum"));
-		}
-		int Mtotal = memberService.getMembertotal();
-		
-		
 		String mem_seq = request.getParameter("mem_seq");
 		MemberDTO mdto = new MemberDTO();
 		mdto.setMem_seq(mem_seq);
 		log.info("mem_seq : " + mem_seq);
 		Map<String, Object> mmap = memberService.deleteMember(mdto, (String) session.getAttribute("SS_MEM_SEQ"));
-
-		model.addAttribute("mlist", (List<MemberDTO>) mmap.get("mlist"));
-		model.addAttribute("MPgNum",MPgNum);
-		model.addAttribute("Mtotal",Mtotal);
-		
+		model.addAttribute("msg","회원정보삭제에 성공하셨습니다.");
+		model.addAttribute("url","/admin/adminmain.do");
 		log.info(this.getClass().getName() + "deletemember end!");
-		return "/admin/adminmain";
+		return "/redirect";
 	}
 
 	@RequestMapping("/member/logout")
@@ -510,5 +505,35 @@ public class MemberController {
 
 		log.info(this.getClass().getName() + ".memberChPassword end!");
 		return "/notice/noticeredirect";
+	}
+	@RequestMapping(value = "/member/setmemberstop")
+	public String setmemberstop(HttpSession session, HttpServletRequest request, HttpServletResponse response,
+			Model model) throws Exception {
+
+		log.info(this.getClass().getName() + " setmemberstop start!");
+		String mem_seq = request.getParameter("mem_seq");
+		MemberDTO mdto = new MemberDTO();
+		mdto.setMem_seq(mem_seq);
+		log.info("mem_seq : " + mem_seq);
+		int res = memberService.setMemberStop(mem_seq);
+		model.addAttribute("msg","회원을 정지상태로 변경하였습니다.");
+		model.addAttribute("url","/admin/adminmain.do");
+		log.info(this.getClass().getName() + "setmemberstop end!");
+		return "/redirect";
+	}
+	@RequestMapping(value = "/member/setmemberstart")
+	public String setmemberstart(HttpSession session, HttpServletRequest request, HttpServletResponse response,
+			Model model) throws Exception {
+
+		log.info(this.getClass().getName() + " setmemberstart start!");
+		String mem_seq = request.getParameter("mem_seq");
+		MemberDTO mdto = new MemberDTO();
+		mdto.setMem_seq(mem_seq);
+		log.info("mem_seq : " + mem_seq);
+		int res = memberService.setMemberStart(mem_seq);
+		model.addAttribute("msg","회원정지를 해제하였습니다.");
+		model.addAttribute("url","/admin/adminmain.do");
+		log.info(this.getClass().getName() + "setmemberstart end!");
+		return "/redirect";
 	}
 }

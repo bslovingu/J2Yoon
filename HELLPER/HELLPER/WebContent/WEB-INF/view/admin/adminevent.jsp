@@ -147,7 +147,7 @@
 				id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="#"><%=user_name%> 관리자님 환영합니다.</a></li>
-					<li class="page-scroll"><a href="#notice">공지사항</a></li>
+					<li class="page-scroll"><a href="/admin/NoticeList.do">공지사항</a></li>
 					<li class="page-scroll"><a href="#event">체육시설 조회</a></li>
 					<li class="page-scroll"><a href="/exercise/adminexercise.do">체육시설
 							예약정보</a></li>
@@ -201,8 +201,7 @@
 						<div class="table_1st div_content_box"><%=elist.get(i).getFac_seq()%></div>
 						<div class="table_2nd div_content_box">
 							<a
-								href="/예약페이지만들어서 넘어가게해야징.do?nseq=<%=elist.get(i).getFac_seq()%>"><%=elist.get(i).getSpo_kind().replaceAll("& #40;", "(").replaceAll("& #41;", ")")
-						.replaceAll("& gt;", ">").replaceAll("& lt;", "<")%></a>
+								href="/예약페이지만들어서 넘어가게해야징.do?nseq=<%=elist.get(i).getFac_seq()%>"><%=elist.get(i).getSpo_kind()%></a>
 						</div>
 						<div class="table_3rd div_content_box"><%=elist.get(i).getFac_loc()%></div>
 						<div class="table_4th div_content_box"><%=elist.get(i).getFac_name()%></div>

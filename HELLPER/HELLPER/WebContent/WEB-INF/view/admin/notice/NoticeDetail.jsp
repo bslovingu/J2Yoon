@@ -1,15 +1,19 @@
-<%@page import="java.util.List"%>
+<%@page import="poly.dto.CommentDTO"%>
+<%@page import="poly.dto.QnADTO"%>
+<%@page import="poly.dto.EventDTO"%>
+<%@page import="poly.dto.MemberDTO"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="poly.dto.NoticeDTO"%>
-<%@page import="poly.util.EncryptUtil" %>
+<%@page import="java.util.List"%>
+<%@page import="poly.util.EncryptUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
 <%
+	String user_email = EncryptUtil.decAES128CBC((String) session.getAttribute("SS_USER_EMAIL"));
 	String user_name = (String) session.getAttribute("SS_USER_NAME");
-	String user_mail = EncryptUtil.decAES128CBC((String) session.getAttribute("SS_USER_EMAIL"));
-	List<NoticeDTO> nlist = (List<NoticeDTO>) request.getAttribute("nlist");
-	int NPgNum = (int) request.getAttribute("NPgNum");
-	int Ntotal = (int) request.getAttribute("Ntotal");
+	
+	NoticeDTO ndetail = (NoticeDTO) request.getAttribute("ndetail");
+	
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,8 +29,6 @@
 <title>Welcome to SPORnSER</title>
 
 <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="/vendor/datatables-plugins/dataTables.bootstrap.css"
-	rel="stylesheet">
 <link href="/css/freelancer.min.css" rel="stylesheet">
 <link href="/vendor/font-awesome/css/font-awesome.min.css"
 	rel="stylesheet" type="text/css">
@@ -35,12 +37,17 @@
 <link
 	href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic"
 	rel="stylesheet" type="text/css">
+
 <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
 <style type="text/css">
+.chart-area {
+	height: 350px;
+}
+
 .div_content_container {
 	display: table;
 	table-layout: fixed;
@@ -57,29 +64,29 @@
 	padding-top: 12px;
 	padding-bottom: 12px;
 }
+
 .table_1st {
-   width: 60px;
-   text-align: center;
+	width: 60px;
+	text-align: center;
 }
 
 .table_2nd {
 	text-align: center;
-
 }
 
 .table_3rd {
-   width: 60px;
-   text-align: center;
+	width: 60px;
+	text-align: center;
 }
 
 .table_4th {
-   width: 240px;
-   text-align: center;
+	width: 240px;
+	text-align: center;
 }
 
 .table_5th {
-  width: 140px;
-   text-align: center;
+	width: 140px;
+	text-align: center;
 }
 
 .pagingBox {
@@ -116,7 +123,7 @@
 
 	<!-- Navigation -->
 	<%
-		if (user_mail.equals("sincethe1997@naver.com")) {
+		if (user_email.equals("sincethe1997@naver.com")) {
 	%>
 	<!-- Navigation -->
 	<nav id="mainNav"
@@ -201,9 +208,11 @@
 		</div>
 	</header>
 	<!--------------------------------------------------------------------------Header end------------------------------------------------------------------------------------------>
+	
+	<!--------------------------------------------------------------------------notice detail start------------------------------------------------------------------------------------------>
 
 	<section id="notice">
-		<div class="container" style="margin: auto; text-align: center;">
+		<div class="container">
 			<div class="row">
 				<div class="col-lg-12 text-center">
 					<h2>공 지 사 항</h2>
@@ -211,124 +220,47 @@
 				</div>
 			</div>
 			<div class="row">
-							<div class="div_content_container"
-					style="color: #666666; font-weight: bold;">
-					<div style="display: table-row;">
-						<div class="table_1st div_content_box">글번호</div>
-						<div class="table_2nd div_content_box">제목</div>
-						<div class="table_3rd div_content_box">조회수</div>
-						<div class="table_4th div_content_box">글쓴이</div>
-						<div class="table_5th div_content_box">날짜</div>
-					</div>
-				</div>
-				<hr>
-				<div class="div_content_container"
-					style="color: #666666; font-weight: bold;">
-					<%
-						for (int i = 0; i < nlist.size(); i++) {
-					%>
-					<div style="display: table-row;">
-						<div class="table_1st div_content_box"><%=nlist.get(i).getNotice_seq()%></div>
-						<div class="table_2nd div_content_box">
-							<a
-								href="/usernotice/usernoticedetail.do?nseq=<%=nlist.get(i).getNotice_seq()%>"><%=nlist.get(i).getNotice_title()%></a>
+				<div class="col-lg-8 col-lg-offset-2">
+					<form action="/admin/NoticeModify.do">
+						<input type="hidden" name="nseq"
+							value="<%=ndetail.getNotice_seq()%>"> <input
+							type="hidden" name="nflag" value="1">
+						<!-- nflag는 같이 noticedetail로 넘어가는데 거기서 다른데로 리턴할수 있도록 -->
+						<div class="row control-group">
+							<div
+								class="form-group col-xs-12 floating-label-form-group controls">
+								<label>Title</label>
+								<p class="help-block text-danger">제목</p>
+								<%=ndetail.getNotice_title()%>
+							</div>
 						</div>
-						<div class="table_3rd div_content_box"><%=nlist.get(i).getNotice_cnt()%></div>
-						<div class="table_4th div_content_box"><%=nlist.get(i).getNotice_uploadname()%></div>
-						<div class="table_5th div_content_box"><%=nlist.get(i).getNotice_upday()%></div>
-					</div>
-					<%
-						}
-					%>
-				</div>
-				<div class="pagingBox" style="margin-top:15px; margin-bottom:15px;">
-					<ul style="list-style: none;">
-						<%
-							int NtotalPage = (Ntotal - 1) / 10 + 1;
-							int NstartPage = ((NPgNum - 1) / 5) * 5 + 1;
-							int Ntemp = ((NtotalPage - 1) / 5) * 5 + 1;
-						%>
-						<!-- < 이전 찍기 -->
-						<%
-							if (NPgNum == 1) {
-						%>
-						<li><span><</span></li>
-						<%
-							} else {
-						%>
-						<li><span><a
-								href="/usernotice/usernoticelist.do?NPgNum=<%=NPgNum - 1%>"><</a></span></li>
-						<%
-							}
-						%>
-						<!-- 숫자 찍기 -->
-						<%
-							if (NstartPage == Ntemp) {
-						%>
-						<%
-							for (int i = NstartPage; i <= NtotalPage; i++) {
-						%>
-						<%
-								if (i == NPgNum) {
-							%>
-							<li><span style="background-color: #18BC9C"><%=i%></span></li>
-							<%
-								} else {
-							%>
-						<li><span><a
-								href="/usernotice/usernoticelist.do?NPgNum=<%=i%>"><%=i%></a></span></li>
-						<%
-							}
-						%>
-						<%
-							}
-						%>
-						<%
-							} else {
-						%>
-						<%
-							for (int i = NstartPage; i <= NstartPage + 4; i++) {
-						%>
-						<%
-								if (i == NPgNum) {
-							%>
-							<li><span style="background-color: #18BC9C"><%=i%></span></li>
-							<%
-								} else {
-							%>
-						<li><span><a
-								href="/usernotice/usernoticelist.do?NPgNum=<%=i%>"><%=i%></a></span></li>
-						<%
-							}
-						%>
-						<%
-							}
-						%>
-						<%
-							}
-						%>
-						<!-- > 다음 찍기 -->
-						<%
-							if (NPgNum == NtotalPage) {
-						%>
-						<li><span>></span></li>
-						<%
-							} else {
-						%>
-						<li><span><a
-								href="/usernotice/usernoticelist.do?NPgNum=<%=NPgNum + 1%>">></a></span></li>
-						<%
-							}
-						%>
-					</ul>
+						<div class="row control-group">
+							<div
+								class="form-group col-xs-12 floating-label-form-group controls">
+								<label>Message</label>
+								<p class="help-block text-danger">내용</p>
+								<%=ndetail.getNotice_content()%>
+							</div>
+						</div>
+						<br>
+						<div id="success"></div>
+						<div class="row">
+							<div class="form-group col-xs-12">
+								<input type="submit" class="btn btn-success btn-lg" value="수정">
+							</div>
+						</div>
+					</form>
+					<a href="/notice/deletenotice.do?nseq=<%=ndetail.getNotice_seq()%>"><button
+							class="btn btn-success btn-lg">삭제</button></a>
 				</div>
 			</div>
 		</div>
 	</section>
 
-	<!--------------------------------------------------------------------------notice list end------------------------------------------------------------------------------------------>
+	<!--------------------------------------------------------------------------notice detail end------------------------------------------------------------------------------------------>
 
-	<!--------------------------------------------------------------------------footer start----------------------------------------------------------------------------------------->
+
+	<!--------------------------------------------------------------------------footer start------------------------------------------------------------------------------------------>
 	<footer>
 		<div class="text-center">
 			<div class="footer-above">
@@ -365,13 +297,6 @@
 	<script src="/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
 	<script src="/vendor/datatables-responsive/dataTables.responsive.js"></script>
 
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$('#dataTables-example').DataTable({
-				responsive : true
-			});
-		});
-	</script>
-</body>
 
+</body>
 </html>

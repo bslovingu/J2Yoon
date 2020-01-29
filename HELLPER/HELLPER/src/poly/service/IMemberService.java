@@ -41,5 +41,9 @@ public interface IMemberService {
 	public int getMembertotal() throws Exception;
 
 	public List<MemberDTO> getMemberInfo(MemberDTO mdto) throws Exception;
+
+	public int setMemberStop(String mem_seq) throws Exception;
+
+	public int setMemberStart(String mem_seq) throws Exception;
 	
 }

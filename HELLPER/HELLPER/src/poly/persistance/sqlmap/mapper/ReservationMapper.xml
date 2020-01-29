@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+<mapper namespace="poly.persistance.mapper.ReservationMapper">
+
+	<!-- 예약 리스트 쿼리 -->
+	<select id="getAllReservation" resultType="ReservationDTO">
+		SELECT
+		RESERV_SEQ,
+		STIME,
+		ETIME,
+		MAX_MEMBER,
+		RESERV_UPLOADNAME
+		FROM
+		RESERVATION
+		WHERE
+		FAC_SEQ = #{fac_seq}
+		ORDER BY ETIME DESC
+	</select>
+
+	<!-- 예약등록시 db삽입 -->
+	<insert parameterType="ReservationDTO" id="insertReservInfo">
+		INSERT INTO RESERVATION
+		(
+		RESERV_SEQ,
+		FAC_SEQ,
+		STIME,
+		ETIME,
+		MAX_MEMBER,
+		RESERV_UPLOADNAME
+		)
+		VALUES
+		(
+		(SELECT NVL(MAX(RESERV_SEQ),0)+1 FROM RESERVATION),
+		#{fac_seq},
+		#{stime},
+		#{etime},
+		#{max_member},
+		#{reserv_uploadname}
+		)
+	</insert>
+	
+	<!-- 예약 리스트 쿼리 -->
+	<select id="getReservationInfo" resultType="String">
+		SELECT NVL(MAX(RESERV_SEQ),0) FROM RESERVATION
+	</select>
+	
+	<!-- 예약 리스트 쿼리 -->
+	<select id="getTodayReservInfo" parameterType="ReservationDTO" resultType="ReservationDTO">
+		SELECT
+		RESERV_SEQ,
+		STIME,
+		ETIME,
+		MAX_MEMBER,
+		RESERV_UPLOADNAME
+		FROM
+		RESERVATION
+		WHERE
+		FAC_SEQ = #{fac_seq} AND STIME LIKE '%'||#{date}||'%'
+		ORDER BY ETIME DESC
+	</select>
+</mapper>
