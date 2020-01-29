@@ -14,11 +14,11 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.apache.tomcat.util.codec.binary.Base64;
+import org.apache.commons.codec.binary.Base64;
 
 public class EncryptUtil {
 
-	/*
+	/*s
 	 * 암호화 알고리즘에 추가시킬 암호화 문구
 	 * 
 	 * 일반적인 암호화 알고리즘 SHA-256을 통해서만 암호화시킬 경우, 암호화 된 값만 보고 일반적인 비밀번호에 대한 값을 쉽게 예측

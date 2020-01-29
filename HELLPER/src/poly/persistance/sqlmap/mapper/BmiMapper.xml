@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="poly.persistance.mapper.BmiMapper">
+	<!-- bmi 저장 쿼리 -->
+	<insert parameterType="BmiDTO" id="insertBmi"> 
+		INSERT INTO BMI
+		 ( 
+		 	BMI_SEQ, BMI_MEM_SEQ, BMI_RESULT 
+		 ) 
+		 VALUES 
+		 ( 
+		 	BMI_SEQ.NEXTVAL, #{bmi_mem_seq}, #{bmi_result}
+		 ) 
+	</insert>
+	
+	<select parameterType="BmiDTO" resultType="BmiDTO" id="getBmi">
+	
+	SELECT * FROM (SELECT BMI_SEQ, BMI_MEM_SEQ, BMI_RESULT FROM BMI WHERE BMI_MEM_SEQ = #{bmi_mem_seq} ORDER BY BMI_SEQ DESC) WHERE ROWNUM <![CDATA[<=]]> 10
+	
+	</select>
+</mapper>
